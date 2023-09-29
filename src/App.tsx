@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "@/pages/Home";
 import Layout from "@/components/Layout/Layout";
-import About from "@/pages/About";
+import Favourite from "@/pages/Favourite";
 import Contact from "@/pages/Contact";
 export default function App() {
   return (
@@ -9,8 +9,8 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/favourite" element={<Favourite />} />
         </Routes>
       </Layout>
     </BrowserRouter>

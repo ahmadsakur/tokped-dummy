@@ -1,6 +1,9 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { MY_QUERY } from '@/lib/graphql/query';
+import { useQuery } from "@apollo/client";
+import { MY_QUERY } from "@/lib/graphql/query";
+import Button from "@/components/Button";
+import { colors } from "@/utils/colors";
+import { LuSettings2 } from "react-icons/lu";
+import { FlexContainer } from "@/components/utility/layout";
 
 const MyComponent = () => {
   const { loading, error, data } = useQuery(MY_QUERY);
@@ -11,7 +14,11 @@ const MyComponent = () => {
 
   return (
     <div>
-      {/* Render your data here */}
+      <FlexContainer>
+        <Button color={colors.sunglow}>
+          <LuSettings2 />
+        </Button>
+      </FlexContainer>
     </div>
   );
 };
