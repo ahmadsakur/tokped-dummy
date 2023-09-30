@@ -7,9 +7,10 @@ import { LuSettings2 } from "react-icons/lu";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "@/components/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
+import { useContactContext } from "@/context/contactContext";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -24,12 +25,22 @@ const ContactGridContainer = styled.div`
 const Contact = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(-1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(-1);
 
-  const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
+  const { loading, error, data , refetch} = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
     },
   });
+
+  const {contacts, setContacts} = useContactContext();
+
+  useEffect(() => {
+    refetch();
+    if (data) {
+      setContacts(data.contact)
+    }
+  }, [data]);
 
   const toggleDropdown = (index: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? -1 : index));
@@ -78,18 +89,24 @@ const Contact = () => {
           <div>Error...</div>
         ) : (
           <>
-            <h4 style={{ 
-              marginTop: "1rem",
-
-             }}>Favourite</h4>
+            <h4
+              style={{
+                marginTop: "1rem",
+              }}
+            >
+              All Contacts
+            </h4>
             <ContactGridContainer>
-              {data?.contact?.map((contact: TContact) => {
+              {contacts.map((contact: TContact) => {
                 return (
                   <ContactCard
                     contact={contact}
                     key={contact.id}
                     toggleDropdown={() => toggleDropdown(contact.id)}
-                    toggleModal={() => setIsModalOpen(true)}
+                    toggleModal={() => {
+                      setIsModalOpen(true),
+                      setSelectedId(contact.id);
+                    }}
                     isExpanded={openDropdownIndex === contact.id}
                   />
                 );
@@ -98,7 +115,11 @@ const Contact = () => {
           </>
         )}
       </div>
-      <DeleteModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedContact={selectedId}
+      />
     </div>
   );
 };

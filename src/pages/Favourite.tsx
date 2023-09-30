@@ -1,7 +1,5 @@
 const Favourite = () => {
-  return (
-    <div>Favourite</div>
-  )
-}
+  return <div>test</div>;
+};
 
-export default Favourite
+export default Favourite;

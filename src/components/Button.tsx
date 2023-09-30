@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 
 interface IButtonProps {
   children: React.ReactNode;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   color: string;
   style?: CSSObject & React.CSSProperties;
 }
