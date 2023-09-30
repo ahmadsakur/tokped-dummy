@@ -7,10 +7,11 @@ import { LuSettings2 } from "react-icons/lu";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteModal from "@/components/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
 import { useContactContext } from "@/context/contactContext";
+import { NavLink } from "react-router-dom";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -27,21 +28,16 @@ const Contact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(-1);
 
-  const { loading, error, data , refetch} = useQuery(GET_CONTACT_LIST, {
+  const { loading, error } = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
     },
+    onCompleted: (data) => {
+      setContacts(data.contact);
+    },
   });
 
-  const {contacts, setContacts} = useContactContext();
-
-  useEffect(() => {
-    refetch();
-    if (data) {
-      setContacts(data.contact)
-    }
-  }, [data]);
-
+  const { contacts, setContacts } = useContactContext();
   const toggleDropdown = (index: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
@@ -56,10 +52,12 @@ const Contact = () => {
     >
       <FlexContainer justifyContent="space-between">
         <h2>Contact</h2>
-        <Button color={colors.mint}>
-          Create
-          <LuSettings2 />
-        </Button>
+        <NavLink to="/contact/create">
+          <Button color={colors.mint}>
+            Create
+            <LuSettings2 />
+          </Button>
+        </NavLink>
       </FlexContainer>
       <FlexContainer
         justifyContent="space-between"
@@ -104,8 +102,7 @@ const Contact = () => {
                     key={contact.id}
                     toggleDropdown={() => toggleDropdown(contact.id)}
                     toggleModal={() => {
-                      setIsModalOpen(true),
-                      setSelectedId(contact.id);
+                      setIsModalOpen(true), setSelectedId(contact.id);
                     }}
                     isExpanded={openDropdownIndex === contact.id}
                   />

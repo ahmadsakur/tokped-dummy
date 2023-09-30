@@ -7,6 +7,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import Button from "./Button";
 import { DELETE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
 import { useMutation } from "@apollo/client";
+import toast from "react-hot-toast";
 
 interface IDeleteModal {
   isOpen: boolean;
@@ -91,12 +92,26 @@ const DeleteModal: React.FC<IDeleteModal> = ({
 
   const handleDeleteContact = async (selectedContactId: number) => {
     try {
-      const { data } = await deleteContactMutation({
+      await deleteContactMutation({
         variables: { id: selectedContactId },
+        update: (cache) => {
+          cache.modify({
+            fields: {
+              contact(existingContacts = [], { readField }) {
+                return existingContacts.filter(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (contactRef:any) =>
+                    selectedContactId !== readField("id", contactRef)
+                );
+              },
+            },
+          });
+        },
       });
-
-      console.log("data", data);
+      toast.success("Contact deleted successfully");
+      onClose();
     } catch (error) {
+      toast.error("An error occurred while deleting the contact");
       console.error("An error occurred while deleting the contact:", error);
     }
   };

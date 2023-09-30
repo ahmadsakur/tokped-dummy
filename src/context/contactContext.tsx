@@ -23,7 +23,6 @@ export const ContactProvider = ({
   children: React.ReactNode;
 }) => {
   const [contacts, setContacts] = useState<TContact[]>([]);
-
   const contextValue: ContactContextValue = {
     contacts,
     setContacts

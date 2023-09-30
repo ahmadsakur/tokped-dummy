@@ -116,7 +116,6 @@ const StyledIcon = styled.span<{ isActive: boolean }>`
         : `
       color: ${colors.white};
       background-color: ${colors.dark};
-
       `}
 
   
