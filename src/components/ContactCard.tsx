@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { FiDelete, FiEdit } from "react-icons/fi";
 // import { useEffect, useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
+import { NavLink } from "react-router-dom";
 
 interface IContactCard {
   contact: TContact;
@@ -65,8 +66,13 @@ const ContactPhone = styled.div`
   color: #a0aec0;
 `;
 
-const ContactCard = ({ contact, isExpanded, toggleDropdown, toggleModal }: IContactCard) => {
-  const { first_name, last_name, phones } = contact;
+const ContactCard = ({
+  contact,
+  isExpanded,
+  toggleDropdown,
+  toggleModal,
+}: IContactCard) => {
+  const { first_name, last_name, phones, id } = contact;
   return (
     <>
       <ContactCardWrapper>
@@ -99,10 +105,15 @@ const ContactCard = ({ contact, isExpanded, toggleDropdown, toggleModal }: ICont
           <SlOptionsVertical />
           {isExpanded && (
             <DropdownMenu>
-              <DropdownItem color={colors.mint}>
-                <FiEdit /> Edit
-              </DropdownItem>
-              <DropdownItem color={colors.bittersweet} onClick={() => toggleModal()}>
+              <NavLink to={`/contact/edit/${id}`}>
+                <DropdownItem color={colors.mint}>
+                  <FiEdit /> Edit
+                </DropdownItem>
+              </NavLink>
+              <DropdownItem
+                color={colors.bittersweet}
+                onClick={() => toggleModal()}
+              >
                 <FiDelete />
                 Delete
               </DropdownItem>

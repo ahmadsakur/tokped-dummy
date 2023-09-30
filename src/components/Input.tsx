@@ -52,7 +52,8 @@ interface ICustomeInputProps {
   id: string;
   value?: string | number;
   defaultValue?: string;
-  onValueChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValueChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly?: boolean;
 }
 function CustomInput({
   label,
@@ -62,6 +63,7 @@ function CustomInput({
   value,
   defaultValue,
   onValueChange,
+  readonly,
 }: ICustomeInputProps) {
   return (
     <div>
@@ -78,6 +80,7 @@ function CustomInput({
           onChange={onValueChange}
           value={value}
           required
+          readOnly={readonly}
         />
       </InputContainer>
     </div>

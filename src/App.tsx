@@ -17,8 +17,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/contact/create" element={<CreateContact />} />
+            <Route path="/contact/edit/:id" element={<EditContact />} />
             <Route path="/favourite" element={<Favourite />} />
-            <Route path="/edit/:id" element={<EditContact />} />
           </Routes>
         </Layout>
       </BrowserRouter>
