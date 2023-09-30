@@ -2,8 +2,13 @@ import styled from "@emotion/styled";
 import { NavLink, useLocation } from "react-router-dom";
 import { FiHome, FiStar, FiUsers } from "react-icons/fi";
 import { colors } from "@/utils/colors";
-import { TLink } from "@/utils/types";
 
+type TLink = {
+  id: number;
+  name: string;
+  path: string;
+  icon: React.ReactNode;
+};
 const links: TLink[] = [
   {
     id: 1,
@@ -53,7 +58,7 @@ const StyledNavbar = styled.div`
     width: 25%;
     background-color: ${colors.gunmetal};
     padding: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
   }
 
   @media (min-width: 1024px) {

@@ -6,7 +6,6 @@ const Container = styled.main`
   margin: 0 auto;
   padding: 2rem 1rem;
   max-width: 80rem;
-  min-height: 100vh;
   margin-bottom: 3rem;
   display: flex;
   justify-content: start;
