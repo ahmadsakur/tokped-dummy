@@ -90,7 +90,7 @@ const ContactCard = ({
           onClick={() => toggleDetailModal()}
         >
           <AvatarImage
-            src={`https://ui-avatars.com/api/?name=${first_name}+${last_name}&background=random`}
+            src={`https://api.dicebear.com/7.x/open-peeps/svg?seed=${first_name}+${last_name}`}
             alt={`${first_name} ${last_name}`}
           />
           <div>

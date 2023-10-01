@@ -21,7 +21,7 @@ const Container = styled.div`
   align-items: start;
   justify-content: start;
   @media (min-width: 768px) {
-    flex-direction: row;
+    max-width: 35rem;
   }
 `;
 interface FormData {
@@ -113,21 +113,19 @@ const EditContact = () => {
         position: "relative",
       }}
     >
-      <h2>Edit Contact</h2>
-      <BackNav path="/contact" />
       <Container>
+      <h4>Edit Contact</h4>
+      <BackNav path="/contact" />
         <div
           style={{
             width: "100%",
             display: "flex",
             aspectRatio: "2/1",
-            backgroundColor: "#ebffefff",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            backgroundImage: `url("https://doodleipsum.com/700x394/outline?bg=03ac0e&i=3dc0d730d8f80c174a5a4d230c1c4941")`,
+            backgroundSize: "cover",
             borderRadius: "0.5rem",
           }}
-        ></div>
+        />
         <div
           style={{
             width: "100%",

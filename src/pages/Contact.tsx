@@ -89,9 +89,9 @@ const Contact = () => {
     refetch({
       where: {
         _or: [
-          { first_name: { _like: `%${debouncedKeywordValue}%` } },
-          { last_name: { _like: `%${debouncedKeywordValue}%` } },
-          { phones: { number: { _like: `%${debouncedKeywordValue}%` } } },
+          { first_name: { _ilike: `%${debouncedKeywordValue}%` } },
+          { last_name: { _ilike: `%${debouncedKeywordValue}%` } },
+          { phones: { number: { _ilike: `%${debouncedKeywordValue}%` } } },
         ],
       },
     });
@@ -124,8 +124,21 @@ const Contact = () => {
         width: "100%",
       }}
     >
-      <FlexContainer justifyContent="space-between">
-        <h2>Contact</h2>
+      <FlexContainer justifyContent="flex-end" alignItems="center">
+        <div
+          style={{
+            width: "min(100%, 20rem)"
+          }}
+        >
+          <CustomInput
+            icon={<BsSearch />}
+            id="search-input"
+            type="text"
+            value={keyword}
+            onValueChange={handleKeywordChange}
+            placeholder="search name, or phone number"
+          />
+        </div>
         <NavLink to="/contact/create">
           <Button buttonType="PRIMARY">
             Create
@@ -133,21 +146,7 @@ const Contact = () => {
           </Button>
         </NavLink>
       </FlexContainer>
-      <div
-        style={{
-          width: "100%",
-          padding: "0.8rem 0",
-        }}
-      >
-        <CustomInput
-          icon={<BsSearch />}
-          id="search-input"
-          type="text"
-          value={keyword}
-          onValueChange={handleKeywordChange}
-          placeholder="search name, or phone number"
-        />
-      </div>
+
       <FlexContainer
         justifyContent="space-between"
         style={{
@@ -156,7 +155,18 @@ const Contact = () => {
         }}
       >
         <h4>Favourite</h4>
-        <PiArrowRight />
+        <NavLink
+          to="/favourite"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            textDecoration: "none",
+          }}
+        >
+          View All
+          <PiArrowRight />
+        </NavLink>
       </FlexContainer>
       <FlexContainer
         justifyContent="start"

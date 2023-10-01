@@ -1,4 +1,5 @@
 import Navbar from "@/components/Layout/Navbar";
+import { colors } from "@/utils/colors";
 import styled from "@emotion/styled";
 
 const Container = styled.main`
@@ -13,12 +14,27 @@ const Container = styled.main`
   @media (min-width: 768px) {
     margin-bottom: 0;
 `;
+
+const Logo = styled.div`
+  top: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${colors.green500};
+  cursor: pointer;
+`;
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Container>
         <Navbar />
-        {children}
+        <div
+          style={{
+            width: "100%",
+          }}
+        >
+          <Logo>ReachOut!</Logo>
+          {children}
+        </div>
       </Container>
     </div>
   );

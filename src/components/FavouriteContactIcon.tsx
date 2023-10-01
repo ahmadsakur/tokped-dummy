@@ -10,13 +10,14 @@ const Wrapper = styled.div`
   border-radius: 20rem;
   min-width: 10rem;
   align-items: center;
-  background-color: ${colors.green100};
+  background-color:rgba(0,0,0,0.1);
   cursor: pointer;
 `;
 const Avatar = styled.img`
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
+  background-color: ${colors.green500};
 `;
 
 const ContactName = styled.div`
@@ -33,15 +34,23 @@ interface IFavouriteContactProps {
   contact: TContact;
   toggleDetailModal: () => void;
 }
-const FavouriteContactIcon = ({ contact, toggleDetailModal }: IFavouriteContactProps) => {
+const FavouriteContactIcon = ({
+  contact,
+  toggleDetailModal,
+}: IFavouriteContactProps) => {
   const { first_name, last_name, phones } = contact;
 
   return (
     <Wrapper onClick={() => toggleDetailModal()}>
-      <Avatar src="https://ui-avatars.com/api/?name=john+doe" alt="john doe" />
-      <div style={{ 
-        marginRight: "1rem",
-       }}>
+      <Avatar
+        src={`https://api.dicebear.com/7.x/open-peeps/svg?seed=${first_name}+${last_name}`}
+        alt="john doe"
+      />
+      <div
+        style={{
+          marginRight: "1rem",
+        }}
+      >
         <ContactName>
           {first_name} {last_name}
         </ContactName>

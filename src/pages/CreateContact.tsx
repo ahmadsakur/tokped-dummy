@@ -17,7 +17,7 @@ const Container = styled.div`
   align-items: start;
   justify-content: start;
   @media (min-width: 768px) {
-    flex-direction: row;
+    max-width: 35rem;
   }
 `;
 
@@ -82,7 +82,7 @@ const CreateContact = () => {
           phones: [""],
         });
         console.log("Mutation response:", data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error("Mutation error:", error.message);
         throw new Error(error);
@@ -101,23 +101,22 @@ const CreateContact = () => {
       style={{
         width: "100%",
         position: "relative",
+        padding: "2rem 0",
       }}
     >
-      <h2>Create Contact</h2>
-      <BackNav path="/contact" />
       <Container>
+        <h4>Create Contact</h4>
+        <BackNav path="/contact" />
         <div
           style={{
             width: "100%",
             display: "flex",
             aspectRatio: "2/1",
-            backgroundColor: "#ebffefff",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            backgroundImage: `url("https://doodleipsum.com/700x394/outline?bg=03ac0e&i=9bddbb6ce41b114c417e179ddbc5c164")`,
+            backgroundSize: "cover",
             borderRadius: "0.5rem",
           }}
-        ></div>
+        />
         <form
           onSubmit={createContactHandler}
           style={{

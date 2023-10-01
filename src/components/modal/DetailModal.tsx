@@ -144,7 +144,7 @@ const DetailModal: React.FC<IDetailModal> = ({
         ) : (
           <ModalContent>
             <ProfileImage
-              src={`https://ui-avatars.com/api/?name=${data.contact_by_pk.first_name}+${data.contact_by_pk.last_name}&background=random`}
+              src={`https://api.dicebear.com/7.x/open-peeps/svg?seed=${data.contact_by_pk.first_name}+${data.contact_by_pk.last_name}`}
             />
             <div
               style={{

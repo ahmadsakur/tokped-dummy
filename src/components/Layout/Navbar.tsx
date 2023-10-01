@@ -54,8 +54,9 @@ const StyledNavbar = styled.div`
     position: sticky;
     top: 1rem;
     left: 0;
-    height: 100%;
-    min-height: 80vh;
+    height: 90vh;
+    background-color: transparent;
+    border : 1px solid ${colors.green500};
     width: 25%;
     padding: 1rem;
     border-radius: 1rem;
@@ -96,9 +97,10 @@ const StyledNavText = styled.span<{ isActive: boolean }>`
     ${(props) =>
       props.isActive &&
       `
+      color: ${colors.green500};
       font-weight: 600;
     `}
-  }
+  
 `;
 
 const StyledIcon = styled.span<{ isActive: boolean }>`
