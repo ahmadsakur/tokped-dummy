@@ -21,11 +21,12 @@
     "noFallthroughCasesInSwitch": true,
 
     /* Absolute Import */
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "src/*": ["src/*"],
+      "tests/*": ["__tests__/*"]
     },
-    "types": ["node"] 
+    "types": ["node"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

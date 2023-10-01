@@ -1,9 +1,9 @@
 import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 import { BsInfoCircle } from "react-icons/bs";
 import Button from "../Button";
-import { DELETE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
+import { DELETE_CONTACT_MUTATION } from "src/lib/graphql/mutation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 

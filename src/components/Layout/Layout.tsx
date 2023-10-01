@@ -1,5 +1,5 @@
-import Navbar from "@/components/Layout/Navbar";
-import { colors } from "@/utils/colors";
+import Navbar from "src/components/Layout/Navbar";
+import { colors } from "src/utils/colors";
 import styled from "@emotion/styled";
 
 const Container = styled.main`

@@ -1,5 +1,5 @@
-import { colors } from "@/utils/colors";
-import { TContact } from "@/utils/queryType";
+import { colors } from "src/utils/colors";
+import { TContact } from "src/utils/queryType";
 import styled from "@emotion/styled";
 
 const Wrapper = styled.div`

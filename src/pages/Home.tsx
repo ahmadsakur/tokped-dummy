@@ -1,6 +1,7 @@
-import { colors } from "@/utils/colors";
+
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
+import { colors } from "src/utils/colors";
 
 const HomeContainer = styled.div`
   padding: 2rem 0;

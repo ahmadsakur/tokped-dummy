@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 import { NavLink } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 const StyledButton = styled.div`

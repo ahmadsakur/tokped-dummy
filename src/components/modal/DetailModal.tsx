@@ -1,11 +1,11 @@
 import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 
-import Button from "@/components/Button";
+import Button from "src/components/Button";
 import { useQuery } from "@apollo/client";
-import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
-import { useContactContext } from "@/context/contactContext";
+import { GET_CONTACT_DETAIL } from "src/lib/graphql/query";
+import { useContactContext } from "src/context/contactContext";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import toast from "react-hot-toast";
 

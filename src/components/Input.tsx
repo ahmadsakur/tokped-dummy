@@ -1,4 +1,4 @@
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 import styled from "@emotion/styled";
 
 const Label = styled.label`
