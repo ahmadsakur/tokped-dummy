@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
 import { CREATE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
+import { validateInput } from "@/utils/validateInput";
 import { useMutation } from "@apollo/client";
 import styled from "@emotion/styled";
 import React from "react";
@@ -63,6 +64,7 @@ const CreateContact = () => {
   const createContactHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const validationStatus: string[] = validateInput(formData);
     const createContact = async () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -88,12 +90,16 @@ const CreateContact = () => {
         throw new Error(error);
       }
     };
-
-    toast.promise(createContact(), {
-      loading: "Creating contact...",
-      success: "Contact updated successfully!",
-      error: (error) => `${error.message}`,
-    });
+    if (validationStatus.length > 0) {
+      toast.error(validationStatus.join("\n"));
+      return;
+    } else {
+      toast.promise(createContact(), {
+        loading: "Creating contact...",
+        success: "Contact created successfully!",
+        error: (error) => `${error.message}`,
+      });
+    }
   };
 
   return (

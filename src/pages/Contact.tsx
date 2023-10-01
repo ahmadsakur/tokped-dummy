@@ -8,10 +8,9 @@ import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
 import { ChangeEvent, useEffect, useState } from "react";
 import DeleteModal from "@/components/modal/DeleteModal";
-import { PiArrowRight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
 import DetailModal from "@/components/modal/DetailModal";
-import { BsFillPersonPlusFill, BsSearch } from "react-icons/bs";
+import { BsArrowRight, BsFillPersonPlusFill, BsSearch } from "react-icons/bs";
 import { useDebounce } from "@/hooks/useDebounce";
 import CustomInput from "@/components/Input";
 import FavouriteContactIcon from "@/components/FavouriteContactIcon";
@@ -39,31 +38,15 @@ const PaginationContainer = styled.div`
 `;
 
 const PaginationButton = styled.button`
-  display: none;
-  @media (min-width: 768px) {
-    border: none;
-    background-color: ${colors.green500};
-    padding: 0.5rem 1rem;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    color: ${colors.white};
-    display: block;
-  }
-`;
-
-const PaginationMoreButton = styled.button`
   border: none;
-  background-color: ${colors.white};
+  background-color: ${colors.green500};
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  margin-right: 1rem;
+  border-radius: 0.2rem;
   cursor: pointer;
-  color: ${colors.green500};
-
-  @media (min-width: 768px) {
-    display: none;
-  }
+  color: ${colors.white};
+  display: block;
 `;
+
 const Contact = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(-1);
   const [isDeleteModalOpen, setisDeleteModalOpen] = useState(false);
@@ -116,18 +99,30 @@ const Contact = () => {
     }
   };
 
+  useEffect(() => {
+    if(data) {
+      // remove element from data if it is in favContacts
+      const filteredData = data.contact.filter((contact: TContact) => {
+        return !favContacts.some((favContact: TContact) => favContact.id === contact.id)
+      })
+      console.log('filteredData',filteredData)
+    }
+    console.log('ok')
+  },[favContacts,data])
+
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
+        padding: "2rem 0",
       }}
     >
-      <FlexContainer justifyContent="flex-end" alignItems="center">
+      <FlexContainer justifyContent="flex-end" alignItems="start">
         <div
           style={{
-            width: "min(100%, 20rem)"
+            width: "min(100%, 20rem)",
           }}
         >
           <CustomInput
@@ -140,7 +135,9 @@ const Contact = () => {
           />
         </div>
         <NavLink to="/contact/create">
-          <Button buttonType="PRIMARY">
+          <Button buttonType="PRIMARY" style={{ 
+            padding: ".8rem 1rem",
+           }}>
             Create
             <BsFillPersonPlusFill />
           </Button>
@@ -165,7 +162,7 @@ const Contact = () => {
           }}
         >
           View All
-          <PiArrowRight />
+          <BsArrowRight />
         </NavLink>
       </FlexContainer>
       <FlexContainer
@@ -248,8 +245,6 @@ const Contact = () => {
               Next
             </PaginationButton>
           )}
-
-          <PaginationMoreButton>Load More</PaginationMoreButton>
         </PaginationContainer>
       </div>
       <DeleteModal

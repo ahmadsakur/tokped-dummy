@@ -1,7 +1,7 @@
 import { colors } from "@/utils/colors";
 import { TContact } from "@/utils/queryType";
 import styled from "@emotion/styled";
-import { FiDelete, FiEdit, FiInfo } from "react-icons/fi";
+import { FiDelete, FiEdit } from "react-icons/fi";
 import { SlOptionsVertical } from "react-icons/sl";
 import { NavLink } from "react-router-dom";
 
@@ -68,7 +68,7 @@ const ContactPhone = styled.div`
   color: #a0aec0;
 `;
 
-const ContactCard = ({
+const FavouriteContactCard = ({
   contact,
   isExpanded,
   toggleDropdown,
@@ -85,7 +85,9 @@ const ContactCard = ({
             flexDirection: "row",
             gap: "1rem",
             alignItems: "center",
+            cursor: "pointer",
           }}
+          onClick={() => toggleDetailModal()}
         >
           <AvatarImage
             src={`https://api.dicebear.com/7.x/open-peeps/svg?seed=${first_name}+${last_name}`}
@@ -107,11 +109,7 @@ const ContactCard = ({
         >
           <SlOptionsVertical />
           {isExpanded && (
-            <DropdownMenu >
-              <DropdownItem onClick={() => toggleDetailModal()}>
-                <FiInfo />
-                Detail
-              </DropdownItem>
+            <DropdownMenu>
               <NavLink to={`/contact/edit/${id}`}>
                 <DropdownItem>
                   <FiEdit /> Edit
@@ -129,4 +127,4 @@ const ContactCard = ({
   );
 };
 
-export default ContactCard;
+export default FavouriteContactCard;

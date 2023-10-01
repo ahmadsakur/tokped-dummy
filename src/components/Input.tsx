@@ -32,7 +32,7 @@ const IconContainer = styled.div`
 
 const Input = styled.input`
   width: fill-available;
-  padding: 0.8rem 2rem;
+  padding: 0.675rem 2rem;
   background-color: white;
   border: 1px solid green;
   color: ${colors.dark};
@@ -50,7 +50,6 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: ${colors.green500}};
-    box-shadow: 0 0 0 2px ${colors.green100}};
   }
 `;
 
