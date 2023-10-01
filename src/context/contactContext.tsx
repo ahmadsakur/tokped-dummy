@@ -1,4 +1,4 @@
-import { TContact } from "@/utils/queryType";
+import { TContact } from "src/utils/queryType";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface ContactContextValue {

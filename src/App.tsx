@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "@/pages/Home";
-import Layout from "@/components/Layout/Layout";
-import Favourite from "@/pages/Favourite";
-import Contact from "@/pages/Contact";
-import CreateContact from "@/pages/CreateContact";
-import EditContact from "@/pages/EditContact";
+import Home from "src/pages/Home";
+import Layout from "src/components/Layout/Layout";
+import Favourite from "src/pages/Favourite";
+import Contact from "src/pages/Contact";
+import CreateContact from "src/pages/CreateContact";
+import EditContact from "src/pages/EditContact";
 import { ContactProvider } from "./context/contactContext";
 import { Toaster } from "react-hot-toast";
 export default function App() {

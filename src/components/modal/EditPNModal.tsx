@@ -1,12 +1,12 @@
 import { useEffect, MouseEvent, useState } from "react";
 import styled from "@emotion/styled";
-import { colors } from "@/utils/colors";
-import Button from "@/components/Button";
+import { colors } from "src/utils/colors";
+import Button from "src/components/Button";
 import toast from "react-hot-toast";
-import CustomInput from "@/components/Input";
+import CustomInput from "src/components/Input";
 import { useMutation } from "@apollo/client";
-import { UPDATE_PN_MUTATION } from "@/lib/graphql/mutation";
-import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
+import { UPDATE_PN_MUTATION } from "src/lib/graphql/mutation";
+import { GET_CONTACT_DETAIL } from "src/lib/graphql/query";
 import { BsPhone } from "react-icons/bs";
 
 interface IUpdatePNModalProps {

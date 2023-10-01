@@ -1,11 +1,11 @@
-import { colors } from "@/utils/colors";
-import { TContact } from "@/utils/queryType";
+import { colors } from "src/utils/colors";
+import { TContact } from "src/utils/queryType";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import DeleteModal from "@/components/modal/DeleteModal";
-import DetailModal from "@/components/modal/DetailModal";
-import { useContactContext } from "@/context/contactContext";
-import ContactCard from "@/components/ContactCard";
+import DeleteModal from "src/components/modal/DeleteModal";
+import DetailModal from "src/components/modal/DetailModal";
+import { useContactContext } from "src/context/contactContext";
+import ContactCard from "src/components/ContactCard";
 
 const ContactGridContainer = styled.div`
   display: grid;

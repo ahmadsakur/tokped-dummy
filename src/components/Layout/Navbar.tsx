@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { NavLink, useLocation } from "react-router-dom";
 import { FiHome, FiStar, FiUsers } from "react-icons/fi";
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 
 type TLink = {
   id: number;

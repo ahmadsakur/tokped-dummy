@@ -1,17 +1,17 @@
-import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
+import { GET_CONTACT_DETAIL } from "src/lib/graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import CustomInput from "@/components/Input";
-import { FlexContainer } from "@/components/utility/layout";
-import { UPDATE_WITH_ID_MUTATION } from "@/lib/graphql/mutation";
+import CustomInput from "src/components/Input";
+import { FlexContainer } from "src/components/utility/layout";
+import { UPDATE_WITH_ID_MUTATION } from "src/lib/graphql/mutation";
 import toast from "react-hot-toast";
-import EditPNModal from "@/components/modal/EditPNModal";
+import EditPNModal from "src/components/modal/EditPNModal";
 import { BsPhone, BsPerson, BsPen } from "react-icons/bs";
-import Button from "@/components/Button";
-import BackNav from "@/components/BackNav";
+import Button from "src/components/Button";
+import BackNav from "src/components/BackNav";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import { validateInput } from "@/utils/validateInput";
+import { validateInput } from "src/utils/validateInput";
 
 const Container = styled.div`
   display: flex;

@@ -1,20 +1,20 @@
-import Button from "@/components/Button";
-import { FlexContainer } from "@/components/utility/layout";
-import { GET_CONTACT_LIST } from "@/lib/graphql/query";
-import { colors } from "@/utils/colors";
+import Button from "src/components/Button";
+import { FlexContainer } from "src/components/utility/layout";
+import { GET_CONTACT_LIST } from "src/lib/graphql/query";
+import { colors } from "src/utils/colors";
 import { useQuery } from "@apollo/client";
-import { TContact } from "@/utils/queryType";
-import ContactCard from "@/components/ContactCard";
+import { TContact } from "src/utils/queryType";
+import ContactCard from "src/components/ContactCard";
 import styled from "@emotion/styled";
 import { ChangeEvent, useEffect, useState } from "react";
-import DeleteModal from "@/components/modal/DeleteModal";
+import DeleteModal from "src/components/modal/DeleteModal";
 import { NavLink } from "react-router-dom";
-import DetailModal from "@/components/modal/DetailModal";
+import DetailModal from "src/components/modal/DetailModal";
 import { BsArrowRight, BsFillPersonPlusFill, BsSearch } from "react-icons/bs";
-import { useDebounce } from "@/hooks/useDebounce";
-import CustomInput from "@/components/Input";
-import FavouriteContactIcon from "@/components/FavouriteContactIcon";
-import { useContactContext } from "@/context/contactContext";
+import { useDebounce } from "src/hooks/useDebounce";
+import CustomInput from "src/components/Input";
+import FavouriteContactIcon from "src/components/FavouriteContactIcon";
+import { useContactContext } from "src/context/contactContext";
 
 const ContactGridContainer = styled.div`
   display: grid;

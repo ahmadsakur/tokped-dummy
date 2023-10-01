@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from "react";
 import styled from "@emotion/styled";
 import { CSSObject, css } from "@emotion/react";
-import { colors } from "@/utils/colors";
+import { colors } from "src/utils/colors";
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;

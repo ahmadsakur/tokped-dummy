@@ -1,9 +1,9 @@
-import BackNav from "@/components/BackNav";
-import Button from "@/components/Button";
-import CustomInput from "@/components/Input";
-import { FlexContainer } from "@/components/utility/layout";
-import { CREATE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
-import { validateInput } from "@/utils/validateInput";
+import BackNav from "src/components/BackNav";
+import Button from "src/components/Button";
+import CustomInput from "src/components/Input";
+import { FlexContainer } from "src/components/utility/layout";
+import { CREATE_CONTACT_MUTATION } from "src/lib/graphql/mutation";
+import { validateInput } from "src/utils/validateInput";
 import { useMutation } from "@apollo/client";
 import styled from "@emotion/styled";
 import React from "react";
