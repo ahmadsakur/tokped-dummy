@@ -1,11 +1,10 @@
 import { TContact } from "@/utils/queryType";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ContactContextValue {
-  contacts: TContact[];
-  setContacts: React.Dispatch<React.SetStateAction<TContact[]>>;
   favContacts: TContact[];
-  setFavContacts: React.Dispatch<React.SetStateAction<TContact[]>>;
+  addToFavorite: (contact: TContact) => void;
+  removeFromFavorite: (contact: TContact) => void;
 }
 
 const ContactContext = createContext<ContactContextValue | undefined>(
@@ -26,15 +25,43 @@ export const ContactProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [contacts, setContacts] = useState<TContact[]>([]);
+  // const [contacts, setContacts] = useState<TContact[]>([]);
   const [favContacts, setFavContacts] = useState<TContact[]>([]);
-  const contextValue: ContactContextValue = {
-    contacts,
-    setContacts,
-    favContacts,
-    setFavContacts,
+ 
+
+  useEffect(() => {
+    const localFavContacts = localStorage.getItem("favContacts");
+    if (localFavContacts) {
+      setFavContacts(JSON.parse(localFavContacts));
+      console.log("localFavContacts", localFavContacts);
+    }
+  }, []);
+
+  const addToFavorite = (contact: TContact) => {
+    setFavContacts((prev) => [...prev, contact]);
+    localStorage.setItem(
+      "favContacts",
+      JSON.stringify([...favContacts, contact])
+    );
   };
 
+  const removeFromFavorite = (contact: TContact) => {
+    setFavContacts((prev) =>
+      prev.filter((favContact) => favContact.id !== contact.id)
+    );
+    localStorage.setItem(
+      "favContacts",
+      JSON.stringify(
+        favContacts.filter((favContact) => favContact.id !== contact.id)
+      )
+    );
+  };
+
+  const contextValue: ContactContextValue = {
+    favContacts,
+    addToFavorite,
+    removeFromFavorite,
+  };
   return (
     <ContactContext.Provider value={contextValue}>
       {children}

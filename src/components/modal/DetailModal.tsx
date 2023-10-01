@@ -92,18 +92,16 @@ const DetailModal: React.FC<IDetailModal> = ({
     },
   });
 
-  const { favContacts, setFavContacts } = useContactContext();
+  const { favContacts, addToFavorite, removeFromFavorite } =
+    useContactContext();
   const isFav = favContacts.some((favContact) => favContact.id === contactId);
 
   const handleFav = () => {
     if (isFav) {
-      // remove from fav
-      setFavContacts((prev) =>
-        prev.filter((favContact) => favContact.id !== contactId)
-      );
+      removeFromFavorite(data.contact_by_pk);
       toast.success("Contact removed from favourite");
     } else {
-      setFavContacts((prev) => [...prev, data.contact_by_pk]);
+      addToFavorite(data.contact_by_pk);
       toast.success("Contact added to favourite");
     }
     onClose();
@@ -154,9 +152,11 @@ const DetailModal: React.FC<IDetailModal> = ({
               <h2>
                 {data.contact_by_pk.first_name} {data.contact_by_pk.last_name}
               </h2>
-              {data.contact_by_pk.phones.map((phone: { number: string }) => (
-                <p>{phone.number}</p>
-              ))}
+              {data.contact_by_pk.phones.map(
+                (phone: { number: string }, index: number) => (
+                  <p key={index}>{phone.number}</p>
+                )
+              )}
               <ModalButtonContainer>
                 <Button onClick={onClose} buttonType="SECONDARY">
                   Close

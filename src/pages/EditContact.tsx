@@ -3,15 +3,15 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
-import { PiPen } from "react-icons/pi";
 import { UPDATE_WITH_ID_MUTATION } from "@/lib/graphql/mutation";
 import toast from "react-hot-toast";
 import EditPNModal from "@/components/modal/EditPNModal";
-import { BsPhone, BsPerson } from "react-icons/bs";
+import { BsPhone, BsPerson, BsPen } from "react-icons/bs";
 import Button from "@/components/Button";
 import BackNav from "@/components/BackNav";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
+import { validateInput } from "@/utils/validateInput";
 
 const Container = styled.div`
   display: flex;
@@ -99,11 +99,18 @@ const EditContact = () => {
       }
     };
 
-    toast.promise(updateContact(), {
-      loading: "Updating contact...",
-      success: "Contact updated successfully!",
-      error: "Something went wrong!",
-    });
+    const validationStatus: string[] = validateInput(formData);
+
+    if (validationStatus.length > 0) {
+      toast.error(validationStatus.join("\n"));
+      return;
+    } else {
+      toast.promise(updateContact(), {
+        loading: "Updating contact...",
+        success: "Contact updated successfully!",
+        error: "Something went wrong!",
+      });
+    }
   };
 
   return (
@@ -111,11 +118,12 @@ const EditContact = () => {
       style={{
         width: "100%",
         position: "relative",
+        padding: "2rem 0",
       }}
     >
       <Container>
-      <h4>Edit Contact</h4>
-      <BackNav path="/contact" />
+        <h4>Edit Contact</h4>
+        <BackNav path="/contact" />
         <div
           style={{
             width: "100%",
@@ -173,7 +181,7 @@ const EditContact = () => {
                     }}
                   >
                     <Button onClick={(e) => handleUpdatePN(e, phone)}>
-                      <PiPen />
+                      <BsPen />
                     </Button>
                   </div>
                 </FlexContainer>

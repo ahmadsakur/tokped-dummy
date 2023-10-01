@@ -1,7 +1,7 @@
 import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@/utils/colors";
-import { PiWarningCircleLight } from "react-icons/pi";
+import { BsInfoCircle } from "react-icons/bs";
 import Button from "../Button";
 import { DELETE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
 import { useMutation } from "@apollo/client";
@@ -129,7 +129,7 @@ const DeleteModal: React.FC<IDeleteModal> = ({
       <ModalOverlay id="modal-overlay" onClick={handleOutsideClick}>
         <ModalContent>
           <IconContainer>
-            <PiWarningCircleLight />
+            <BsInfoCircle />
           </IconContainer>
           <h2>Delete Contact</h2>
           <p>
