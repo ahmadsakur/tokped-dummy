@@ -1,18 +1,18 @@
 import React from "react";
-import styled, { CSSObject } from "@emotion/styled";
+import styled from "@emotion/styled";
+import { CSSObject, css } from "@emotion/react";
 import { colors } from "@/utils/colors";
-import { css } from "@emotion/react";
 
 interface IButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  color: string;
-  style?: CSSObject & React.CSSProperties;
+  buttonType: "PRIMARY" | "SECONDARY";
+  style?: React.CSSProperties & CSSObject;
 }
 
 const StyledButton = styled.button<IButtonProps>`
-  background-color: ${(props) => props.color || colors.gunmetal};
   border: none;
+  box-sizing: border-box;
   border-radius: 4px;
   padding: 12px 16px;
   display: flex;
@@ -20,20 +20,34 @@ const StyledButton = styled.button<IButtonProps>`
   justify-content: center;
   gap: 4px;
   cursor: pointer;
+  font-size: .8rem;
+  font-weight: 500;
   transition: all 0.2s ease-in-out;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &:active {
-    transform: scale(1.2);
-  }
 
+  ${({ buttonType }) =>
+    buttonType === "PRIMARY" &&
+    css`
+      background: ${colors.green500};
+      color: white;
+      &:hover {
+        background: ${colors.green600};
+      }
+    `}
+
+  ${({ buttonType }) =>
+    buttonType === "SECONDARY" &&
+    css`
+      background: white;
+      color: ${colors.green500};
+      border: 1px solid green;
+
+    `}
   ${(props) => css(props.style)};
-};`;
+`;
 
-const Button = ({ children, onClick, color, style }: IButtonProps) => {
+const Button = ({ children, onClick, buttonType, style }: IButtonProps) => {
   return (
-    <StyledButton color={color} onClick={onClick} style={style}>
+    <StyledButton buttonType={buttonType} onClick={onClick} style={style}>
       {children}
     </StyledButton>
   );

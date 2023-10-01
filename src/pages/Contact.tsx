@@ -3,15 +3,14 @@ import { FlexContainer } from "@/components/utility/layout";
 import { GET_CONTACT_LIST } from "@/lib/graphql/query";
 import { colors } from "@/utils/colors";
 import { useQuery } from "@apollo/client";
-import { LuSettings2 } from "react-icons/lu";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import DeleteModal from "@/components/DeleteModal";
+import DeleteModal from "@/components/modal/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
-import DetailModal from "@/components/DetailModal";
+import DetailModal from "@/components/modal/DetailModal";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -27,7 +26,7 @@ const ContactGridContainer = styled.div`
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  gap: 1rem;
 
   @media (min-width: 768px) {
     justify-content: flex-end;
@@ -38,12 +37,11 @@ const PaginationButton = styled.button`
   display: none;
   @media (min-width: 768px) {
     border: none;
-    background-color: ${colors.white};
+    background-color: ${colors.green500};
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    margin-right: 1rem;
+    border-radius: 0.2rem;
     cursor: pointer;
-    color: ${colors.mint};
+    color: ${colors.white};
     display: block;
   }
 `;
@@ -105,9 +103,9 @@ const Contact = () => {
       <FlexContainer justifyContent="space-between">
         <h2>Contact</h2>
         <NavLink to="/contact/create">
-          <Button color={colors.mint}>
+          <Button buttonType="PRIMARY">
             Create
-            <LuSettings2 />
+            {/* <LuSettings2 /> */}
           </Button>
         </NavLink>
       </FlexContainer>

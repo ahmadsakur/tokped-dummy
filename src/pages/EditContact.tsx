@@ -7,7 +7,7 @@ import { FlexContainer } from "@/components/utility/layout";
 import { PiPen } from "react-icons/pi";
 import { UPDATE_WITH_ID_MUTATION } from "@/lib/graphql/mutation";
 import toast from "react-hot-toast";
-import EditPNModal from "@/components/EditPNModal";
+import EditPNModal from "@/components/modal/EditPNModal";
 
 interface FormData {
   first_name: string;

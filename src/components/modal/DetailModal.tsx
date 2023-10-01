@@ -1,9 +1,8 @@
 import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@/utils/colors";
-import { GrUndo } from "react-icons/gr";
-import { MdOutlineCancel } from "react-icons/md";
-import Button from "./Button";
+
+import Button from "@/components/Button";
 import { useQuery } from "@apollo/client";
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
 
@@ -28,8 +27,8 @@ const ModalContent = styled.div`
   left: 1rem;
   right: 1rem;
   transform: translate(0, -50%);
-  background-color: ${colors.dark};
-  color: white;
+  background-color: ${colors.white};
+  color: black;
   padding: 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -118,7 +117,7 @@ const DetailModal: React.FC<IDetailModal> = ({
           <ModalContent>
             <h2>Error</h2>
             <p>{error.message}</p>
-            <Button color={colors.peach} onClick={onClose}>
+            <Button buttonType="PRIMARY" onClick={onClose}>
               Close
             </Button>
           </ModalContent>
@@ -139,12 +138,12 @@ const DetailModal: React.FC<IDetailModal> = ({
                 <p>{phone.number}</p>
               ))}
               <ModalButtonContainer>
-                <Button onClick={onClose} color={colors.mint}>
-                  <GrUndo />
+                <Button onClick={onClose} buttonType="PRIMARY" >
+                  {/* <GrUndo /> */}
                   Add to Favourite
                 </Button>
-                <Button onClick={onClose} color={colors.peach}>
-                  <MdOutlineCancel />
+                <Button onClick={onClose} buttonType="SECONDARY">
+                  {/* <MdOutlineCancel /> */}
                   Close
                 </Button>
               </ModalButtonContainer>

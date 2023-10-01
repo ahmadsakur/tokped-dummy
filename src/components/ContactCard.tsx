@@ -19,7 +19,8 @@ export const DropdownMenu = styled.div`
   top: 100%;
   width: fit-content;
   height: fit-content;
-  background-color: black;
+  background-color: ${colors.green400};
+  color: white;
   border-radius: 0.5rem;
   z-index: 10;
   padding: 0.5rem;
@@ -27,7 +28,7 @@ export const DropdownMenu = styled.div`
   transition: all 0.5s ease-in-out;
 `;
 
-export const DropdownItem = styled.div<{ color: string }>`
+export const DropdownItem = styled.div`
   color: white;
   cursor: pointer;
   display: flex;
@@ -36,8 +37,9 @@ export const DropdownItem = styled.div<{ color: string }>`
   padding: 0.5rem 1rem;
   border-radius: 0.3rem;
   font-size: 0.8rem;
+  color: ${colors.green100};
   &:hover {
-    background-color: ${(props) => props.color || colors.gunmetal}}};
+    background-color: ${colors.green500}
   }
 `;
 const ContactCardWrapper = styled.div`
@@ -110,12 +112,11 @@ const ContactCard = ({
           {isExpanded && (
             <DropdownMenu>
               <NavLink to={`/contact/edit/${id}`}>
-                <DropdownItem color={colors.mint}>
+                <DropdownItem>
                   <FiEdit /> Edit
                 </DropdownItem>
               </NavLink>
               <DropdownItem
-                color={colors.bittersweet}
                 onClick={() => toggleDeleteModal()}
               >
                 <FiDelete />

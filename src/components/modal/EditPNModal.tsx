@@ -1,11 +1,9 @@
 import { useEffect, MouseEvent, useState } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@/utils/colors";
-import { GrUndo } from "react-icons/gr";
-import { MdUpdate } from "react-icons/md";
-import Button from "./Button";
+import Button from "@/components/Button";
 import toast from "react-hot-toast";
-import CustomInput from "./Input";
+import CustomInput from "@/components/Input";
 import { useMutation } from "@apollo/client";
 import { UPDATE_PN_MUTATION } from "@/lib/graphql/mutation";
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
@@ -14,14 +12,13 @@ interface IUpdatePNModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedPN: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  id: any;
+  id: number;
 }
 
 const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 100;
   padding: 1rem;
 `;
@@ -33,8 +30,8 @@ const ModalContent = styled.div`
   left: 1rem;
   right: 1rem;
   transform: translate(0, -50%);
-  background-color: ${colors.dark};
-  color: white;
+  background-color: ${colors.white};
+  color: black;
   padding: 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -107,7 +104,7 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
 
         update: (cache) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const existingContactDetail:any = cache.readQuery({
+          const existingContactDetail: any = cache.readQuery({
             query: GET_CONTACT_DETAIL,
             variables: { id: id },
           });
@@ -133,7 +130,7 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
               },
             };
 
-            console.log("updatedContactDetail", updatedContactDetail)
+            console.log("updatedContactDetail", updatedContactDetail);
 
             cache.writeQuery({
               query: GET_CONTACT_DETAIL,
@@ -178,18 +175,10 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
           />
 
           <ModalButtonContainer>
-            <Button
-              color={colors.gunmetal}
-              onClick={onClose}
-              style={{
-                color: colors.white,
-              }}
-            >
-              <GrUndo />
+            <Button buttonType="SECONDARY" onClick={onClose}>
               Cancel
             </Button>
-            <Button color={colors.dodgerBlue} onClick={handleUpdatePN}>
-              <MdUpdate />
+            <Button buttonType="PRIMARY" onClick={handleUpdatePN}>
               Update
             </Button>
           </ModalButtonContainer>

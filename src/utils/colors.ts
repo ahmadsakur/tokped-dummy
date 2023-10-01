@@ -1,6 +1,6 @@
 export const colors = {
   white: "#FFFFFF",
-  silver: "#C4C5C7",
+  silver: "#a4a4a4",
   gunmetal: "#222D35",
   dark: "#14181F",
   mint: "#00C49B",
@@ -8,4 +8,10 @@ export const colors = {
   bittersweet: "#FA7665ff",
   peach: "#FCC79Aff",
   sunglow: "#FFD254ff",
+  green100: "#ebffefff",
+  green200: "#d6ffdeff",
+  green300: "#80eb93ff",
+  green400: "#4fd15aff",
+  green500: "#03ac0eff",
+  green600: "#00aa5b",
 };
