@@ -2,9 +2,7 @@ import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@/utils/colors";
 import { PiWarningCircleLight } from "react-icons/pi";
-import { GrUndo } from "react-icons/gr";
-import { MdOutlineCancel } from "react-icons/md";
-import Button from "./Button";
+import Button from "../Button";
 import { DELETE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
@@ -18,7 +16,7 @@ interface IDeleteModal {
 const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 100;
   padding: 1rem;
 `;
@@ -30,8 +28,8 @@ const ModalContent = styled.div`
   left: 1rem;
   right: 1rem;
   transform: translate(0, -50%);
-  background-color: ${colors.dark};
-  color: white;
+  background-color: ${colors.white};
+  color: black;
   padding: 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -64,6 +62,16 @@ const ModalButtonContainer = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.green100};
+  color: ${colors.green500};
+  border-radius: 100%;
+  padding: 1rem;
 `;
 
 const DeleteModal: React.FC<IDeleteModal> = ({
@@ -100,7 +108,7 @@ const DeleteModal: React.FC<IDeleteModal> = ({
               contact(existingContacts = [], { readField }) {
                 return existingContacts.filter(
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (contactRef:any) =>
+                  (contactRef: any) =>
                     selectedContactId !== readField("id", contactRef)
                 );
               },
@@ -120,40 +128,22 @@ const DeleteModal: React.FC<IDeleteModal> = ({
     isOpen && (
       <ModalOverlay id="modal-overlay" onClick={handleOutsideClick}>
         <ModalContent>
-          <div
-            style={{
-              padding: "1rem",
-              borderRadius: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-              color: colors.bittersweet,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <IconContainer>
             <PiWarningCircleLight />
-          </div>
+          </IconContainer>
           <h2>Delete Contact</h2>
           <p>
             Are you sure you want to delete this contact? This action cannot be
             undone.
           </p>
           <ModalButtonContainer>
-            <Button
-              color={colors.gunmetal}
-              onClick={onClose}
-              style={{
-                color: colors.white,
-              }}
-            >
-              <GrUndo />
+            <Button buttonType="SECONDARY" onClick={onClose}>
               Cancel
             </Button>
             <Button
-              color={colors.bittersweet}
+              buttonType="PRIMARY"
               onClick={() => handleDeleteContact(selectedContact)}
             >
-              <MdOutlineCancel />
               Delete
             </Button>
           </ModalButtonContainer>

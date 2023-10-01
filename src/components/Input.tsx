@@ -1,15 +1,16 @@
+import { colors } from "@/utils/colors";
 import styled from "@emotion/styled";
-import { PiAddressBook } from "react-icons/pi";
 
 const Label = styled.label`
   display: block;
   margin-bottom: 2px;
   font-size: 14px;
   font-weight: 500;
-  color: #fff;
+  color: black;
 `;
 
 const InputContainer = styled.div`
+  width: 100%;
   position: relative;
   margin-bottom: 6px;
 `;
@@ -18,7 +19,7 @@ const IconContainer = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0.4rem;
+  left: 0.6rem;
   display: flex;
   align-items: center;
   padding-right: 0.4rem;
@@ -26,27 +27,35 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: gray;
+  color: green;
 `;
 
 const Input = styled.input`
-  padding: 0.625rem 2rem;
-  background-color: black;
-  border: 1px solid #d1d5db;
-  color: white;
+  width: fill-available;
+  padding: 0.8rem 2rem;
+  background-color: white;
+  border: 1px solid green;
+  color: ${colors.dark};
   font-size: 14px;
-  border-radius: 0.375rem;
+  border-radius: 0.3rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  ${({ readOnly }) =>
+    readOnly &&
+    `
+  background-color: ${colors.green100};
+  cursor: not-allowed;
+`}
 
   &:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    border-color: ${colors.green500}};
+    box-shadow: 0 0 0 2px ${colors.green100}};
   }
 `;
 
-interface ICustomeInputProps {
-  label: string;
+interface ICustomeInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
   placeholder?: string;
   type: string;
   id: string;
@@ -54,6 +63,7 @@ interface ICustomeInputProps {
   defaultValue?: string;
   onValueChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
+  icon: JSX.Element;
 }
 function CustomInput({
   label,
@@ -64,14 +74,15 @@ function CustomInput({
   defaultValue,
   onValueChange,
   readonly,
+  icon,
 }: ICustomeInputProps) {
   return (
-    <div>
+    <div style={{ 
+      width: "100%",
+     }}>
       <Label htmlFor={id}>{label}</Label>
       <InputContainer>
-        <IconContainer>
-          <PiAddressBook />
-        </IconContainer>
+        <IconContainer>{icon}</IconContainer>
         <Input
           type={type}
           id={id}

@@ -37,7 +37,8 @@ const StyledNavbar = styled.div`
   left: 0.5rem;
   right: 0.5rem;
   width: fill-available;
-  background-color: ${colors.gunmetal};
+  background-color: ${colors.green500};
+  color: ${colors.white};
   justify-content: space-around;
   align-items: center;
   padding: 0.5rem;
@@ -53,10 +54,10 @@ const StyledNavbar = styled.div`
     position: sticky;
     top: 1rem;
     left: 0;
-    height: 100%;
-    min-height: 80vh;
+    height: 90vh;
+    background-color: transparent;
+    border : 1px solid ${colors.green500};
     width: 25%;
-    background-color: ${colors.gunmetal};
     padding: 1rem;
     border-radius: 1rem;
   }
@@ -72,7 +73,7 @@ const NavbarLink = styled(NavLink)`
   justify-content: start;
   align-items: center;
   gap: 1rem;
-  color: #fff;
+  color: black;
   text-decoration: none;
   font-weight: 400;
   font-size: 1.2rem;
@@ -84,16 +85,22 @@ const NavbarLink = styled(NavLink)`
     border-radius: 0.5rem;
   }
   &.active {
-    color: ${colors.mint};
+    color: ${colors.white};
   }
 `;
 
-const StyledNavText = styled.span`
+const StyledNavText = styled.span<{ isActive: boolean }>`
   display: none;
   @media (min-width: 768px) {
     display: inline-block;
     font-size: 0.8rem;
-  }
+    ${(props) =>
+      props.isActive &&
+      `
+      color: ${colors.green500};
+      font-weight: 600;
+    `}
+  
 `;
 
 const StyledIcon = styled.span<{ isActive: boolean }>`
@@ -106,18 +113,17 @@ const StyledIcon = styled.span<{ isActive: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
-
     ${(props) =>
       props.isActive
         ? `
-      color: ${colors.dark};
-      background-color: ${colors.mint};
+      color: ${colors.white};
+      background-color: ${colors.green400};
+      font-weight: 600;
     `
         : `
-      color: ${colors.white};
-      background-color: ${colors.dark};
+      color: ${colors.dark};
+      background-color: rgba(0,0,0,0.1);
       `}
-
   
 `;
 
@@ -130,7 +136,9 @@ export const Navbar = () => {
           <StyledIcon isActive={router.pathname == link.path}>
             {link.icon}
           </StyledIcon>
-          <StyledNavText>{link.name}</StyledNavText>
+          <StyledNavText isActive={router.pathname == link.path}>
+            {link.name}
+          </StyledNavText>
         </NavbarLink>
       ))}
     </StyledNavbar>

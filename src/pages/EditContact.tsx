@@ -1,14 +1,29 @@
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
 import { PiPen } from "react-icons/pi";
 import { UPDATE_WITH_ID_MUTATION } from "@/lib/graphql/mutation";
 import toast from "react-hot-toast";
-import EditPNModal from "@/components/EditPNModal";
+import EditPNModal from "@/components/modal/EditPNModal";
+import { BsPhone, BsPerson } from "react-icons/bs";
+import Button from "@/components/Button";
+import BackNav from "@/components/BackNav";
+import { useParams } from "react-router-dom";
+import styled from "@emotion/styled";
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  align-items: start;
+  justify-content: start;
+  @media (min-width: 768px) {
+    max-width: 35rem;
+  }
+`;
 interface FormData {
   first_name: string;
   last_name: string;
@@ -64,77 +79,128 @@ const EditContact = () => {
   const updateContactHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const { data } = await updateContactMutation({
-        variables: {
-          id: id,
-          _set: {
-            first_name: formData.first_name,
-            last_name: formData.last_name,
+    const updateContact = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      try {
+        const { data } = await updateContactMutation({
+          variables: {
+            id: id,
+            _set: {
+              first_name: formData.first_name,
+              last_name: formData.last_name,
+            },
           },
-        },
-      });
+        });
 
-      refetch();
-      console.log("Mutation response:", data);
-      toast.success("Contact updated successfully!");
-    } catch (error) {
-      console.error("Mutation error:", error);
-      toast.error("something went wrong!");
-    }
+        refetch();
+        console.log("Mutation response:", data);
+      } catch (error) {
+        console.error("Mutation error:", error);
+      }
+    };
+
+    toast.promise(updateContact(), {
+      loading: "Updating contact...",
+      success: "Contact updated successfully!",
+      error: "Something went wrong!",
+    });
   };
 
   return (
-    <div>
-      <h1>Edit Contact</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data?.contact_by_pk ? (
-        <form onSubmit={updateContactHandler}>
-          <CustomInput
-            type="text"
-            id="first_name"
-            label="First Name"
-            value={formData.first_name}
-            onValueChange={handleFirstNameChange}
-          />
-          <CustomInput
-            type="text"
-            id="last_name"
-            label="Last Name"
-            value={formData.last_name}
-            onValueChange={handleLastNameChange}
-          />
-          {formData.phones.map((phone, index) => (
-            <FlexContainer key={index}>
-              <CustomInput
-                id={`phone-${index}`}
-                label={`Phone ${index + 1}`}
-                placeholder={`Phone ${index + 1}`}
-                type="text"
-                value={phone}
-                readonly
-              />
-              {formData.phones.length > 1 && (
-                <button onClick={(e) => handleUpdatePN(e, phone)}>
-                  <PiPen />
-                </button>
-              )}
-            </FlexContainer>
-          ))}
-          <button type="submit">Update Contact</button>
-        </form>
-      ) : (
-        "no data"
-      )}
-      {isEditModalOpen && (
-        <EditPNModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          selectedPN={selectedPN}
-          id={id}
+    <div
+      style={{
+        width: "100%",
+        position: "relative",
+      }}
+    >
+      <Container>
+      <h4>Edit Contact</h4>
+      <BackNav path="/contact" />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            aspectRatio: "2/1",
+            backgroundImage: `url("https://doodleipsum.com/700x394/outline?bg=03ac0e&i=3dc0d730d8f80c174a5a4d230c1c4941")`,
+            backgroundSize: "cover",
+            borderRadius: "0.5rem",
+          }}
         />
-      )}
+        <div
+          style={{
+            width: "100%",
+          }}
+        >
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error.message}</p>}
+          {data?.contact_by_pk ? (
+            <form
+              onSubmit={updateContactHandler}
+              style={{
+                width: "100%",
+              }}
+            >
+              <CustomInput
+                type="text"
+                id="first_name"
+                label="First Name"
+                value={formData.first_name}
+                onValueChange={handleFirstNameChange}
+                icon={<BsPerson />}
+              />
+              <CustomInput
+                type="text"
+                id="last_name"
+                label="Last Name"
+                value={formData.last_name}
+                onValueChange={handleLastNameChange}
+                icon={<BsPerson />}
+              />
+              {formData.phones.map((phone, index) => (
+                <FlexContainer key={index} alignItems="center">
+                  <CustomInput
+                    id={`phone-${index}`}
+                    label={`Phone ${index + 1}`}
+                    placeholder={`Phone ${index + 1}`}
+                    type="text"
+                    value={phone}
+                    readonly
+                    icon={<BsPhone />}
+                  />
+                  <div
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <Button onClick={(e) => handleUpdatePN(e, phone)}>
+                      <PiPen />
+                    </Button>
+                  </div>
+                </FlexContainer>
+              ))}
+              <Button
+                type="submit"
+                buttonType="PRIMARY"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Update Contact
+              </Button>
+            </form>
+          ) : (
+            "no data"
+          )}
+          {isEditModalOpen && (
+            <EditPNModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              selectedPN={selectedPN}
+              id={id}
+            />
+          )}
+        </div>
+      </Container>
     </div>
   );
 };

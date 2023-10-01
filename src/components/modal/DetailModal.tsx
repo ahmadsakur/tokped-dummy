@@ -1,11 +1,13 @@
 import { useEffect, MouseEvent } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@/utils/colors";
-import { GrUndo } from "react-icons/gr";
-import { MdOutlineCancel } from "react-icons/md";
-import Button from "./Button";
+
+import Button from "@/components/Button";
 import { useQuery } from "@apollo/client";
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
+import { useContactContext } from "@/context/contactContext";
+import { BsStar, BsStarFill } from "react-icons/bs";
+import toast from "react-hot-toast";
 
 interface IDetailModal {
   isOpen: boolean;
@@ -28,8 +30,8 @@ const ModalContent = styled.div`
   left: 1rem;
   right: 1rem;
   transform: translate(0, -50%);
-  background-color: ${colors.dark};
-  color: white;
+  background-color: ${colors.white};
+  color: black;
   padding: 1rem;
   border-radius: 0.5rem;
   display: flex;
@@ -76,7 +78,7 @@ const ProfileImage = styled.img`
   border-radius: 100%;
   position: absolute;
 
-  background-color: ${colors.mint};
+  background-color: ${colors.green500};
 `;
 
 const DetailModal: React.FC<IDetailModal> = ({
@@ -89,6 +91,23 @@ const DetailModal: React.FC<IDetailModal> = ({
       id: contactId,
     },
   });
+
+  const { favContacts, setFavContacts } = useContactContext();
+  const isFav = favContacts.some((favContact) => favContact.id === contactId);
+
+  const handleFav = () => {
+    if (isFav) {
+      // remove from fav
+      setFavContacts((prev) =>
+        prev.filter((favContact) => favContact.id !== contactId)
+      );
+      toast.success("Contact removed from favourite");
+    } else {
+      setFavContacts((prev) => [...prev, data.contact_by_pk]);
+      toast.success("Contact added to favourite");
+    }
+    onClose();
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -118,14 +137,14 @@ const DetailModal: React.FC<IDetailModal> = ({
           <ModalContent>
             <h2>Error</h2>
             <p>{error.message}</p>
-            <Button color={colors.peach} onClick={onClose}>
+            <Button buttonType="PRIMARY" onClick={onClose}>
               Close
             </Button>
           </ModalContent>
         ) : (
           <ModalContent>
             <ProfileImage
-              src={`https://ui-avatars.com/api/?name=${data.contact_by_pk.first_name}+${data.contact_by_pk.last_name}&background=random`}
+              src={`https://api.dicebear.com/7.x/open-peeps/svg?seed=${data.contact_by_pk.first_name}+${data.contact_by_pk.last_name}`}
             />
             <div
               style={{
@@ -139,13 +158,21 @@ const DetailModal: React.FC<IDetailModal> = ({
                 <p>{phone.number}</p>
               ))}
               <ModalButtonContainer>
-                <Button onClick={onClose} color={colors.mint}>
-                  <GrUndo />
-                  Add to Favourite
-                </Button>
-                <Button onClick={onClose} color={colors.peach}>
-                  <MdOutlineCancel />
+                <Button onClick={onClose} buttonType="SECONDARY">
                   Close
+                </Button>
+                <Button onClick={handleFav} buttonType="PRIMARY">
+                  {isFav ? (
+                    <>
+                      <BsStar />
+                      Remove from Favourite
+                    </>
+                  ) : (
+                    <>
+                      <BsStarFill />
+                      Add to Favourite
+                    </>
+                  )}
                 </Button>
               </ModalButtonContainer>
             </div>

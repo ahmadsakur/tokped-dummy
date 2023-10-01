@@ -4,8 +4,8 @@ body {
   font-weight: 400;
   margin: 0;
   padding: 0;
-  background-color: #14181f;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -26,5 +26,5 @@ p {
 
 a {
   text-decoration: none;
-  color: #fff;
+  color: black;
 }

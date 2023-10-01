@@ -4,9 +4,13 @@ import { createContext, useContext, useState } from "react";
 interface ContactContextValue {
   contacts: TContact[];
   setContacts: React.Dispatch<React.SetStateAction<TContact[]>>;
+  favContacts: TContact[];
+  setFavContacts: React.Dispatch<React.SetStateAction<TContact[]>>;
 }
 
-const ContactContext = createContext<ContactContextValue | undefined>(undefined);
+const ContactContext = createContext<ContactContextValue | undefined>(
+  undefined
+);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useContactContext() {
@@ -23,9 +27,12 @@ export const ContactProvider = ({
   children: React.ReactNode;
 }) => {
   const [contacts, setContacts] = useState<TContact[]>([]);
+  const [favContacts, setFavContacts] = useState<TContact[]>([]);
   const contextValue: ContactContextValue = {
     contacts,
-    setContacts
+    setContacts,
+    favContacts,
+    setFavContacts,
   };
 
   return (

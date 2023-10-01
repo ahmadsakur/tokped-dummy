@@ -3,15 +3,19 @@ import { FlexContainer } from "@/components/utility/layout";
 import { GET_CONTACT_LIST } from "@/lib/graphql/query";
 import { colors } from "@/utils/colors";
 import { useQuery } from "@apollo/client";
-import { LuSettings2 } from "react-icons/lu";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import DeleteModal from "@/components/DeleteModal";
+import { ChangeEvent, useEffect, useState } from "react";
+import DeleteModal from "@/components/modal/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
-import DetailModal from "@/components/DetailModal";
+import DetailModal from "@/components/modal/DetailModal";
+import { BsFillPersonPlusFill, BsSearch } from "react-icons/bs";
+import { useDebounce } from "@/hooks/useDebounce";
+import CustomInput from "@/components/Input";
+import FavouriteContactIcon from "@/components/FavouriteContactIcon";
+import { useContactContext } from "@/context/contactContext";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -27,7 +31,7 @@ const ContactGridContainer = styled.div`
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  gap: 1rem;
 
   @media (min-width: 768px) {
     justify-content: flex-end;
@@ -38,12 +42,11 @@ const PaginationButton = styled.button`
   display: none;
   @media (min-width: 768px) {
     border: none;
-    background-color: ${colors.white};
+    background-color: ${colors.green500};
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    margin-right: 1rem;
+    border-radius: 0.2rem;
     cursor: pointer;
-    color: ${colors.mint};
+    color: ${colors.white};
     display: block;
   }
 `;
@@ -55,7 +58,7 @@ const PaginationMoreButton = styled.button`
   border-radius: 0.5rem;
   margin-right: 1rem;
   cursor: pointer;
-  color: ${colors.mint};
+  color: ${colors.green500};
 
   @media (min-width: 768px) {
     display: none;
@@ -65,15 +68,34 @@ const Contact = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(-1);
   const [isDeleteModalOpen, setisDeleteModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [keyword, setKeyword] = useState<string>("");
+  const debouncedKeywordValue = useDebounce<string>(keyword, 500);
+  const { favContacts } = useContactContext();
+
   const [selectedId, setSelectedId] = useState(-1);
   const [page, setPage] = useState(1);
 
+  const handleKeywordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
   const { loading, error, data, refetch } = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
       offset: page * 10 - 10,
     },
   });
+
+  useEffect(() => {
+    refetch({
+      where: {
+        _or: [
+          { first_name: { _ilike: `%${debouncedKeywordValue}%` } },
+          { last_name: { _ilike: `%${debouncedKeywordValue}%` } },
+          { phones: { number: { _ilike: `%${debouncedKeywordValue}%` } } },
+        ],
+      },
+    });
+  }, [debouncedKeywordValue, refetch]);
 
   useEffect(() => {
     refetch({
@@ -102,15 +124,29 @@ const Contact = () => {
         width: "100%",
       }}
     >
-      <FlexContainer justifyContent="space-between">
-        <h2>Contact</h2>
+      <FlexContainer justifyContent="flex-end" alignItems="center">
+        <div
+          style={{
+            width: "min(100%, 20rem)"
+          }}
+        >
+          <CustomInput
+            icon={<BsSearch />}
+            id="search-input"
+            type="text"
+            value={keyword}
+            onValueChange={handleKeywordChange}
+            placeholder="search name, or phone number"
+          />
+        </div>
         <NavLink to="/contact/create">
-          <Button color={colors.mint}>
+          <Button buttonType="PRIMARY">
             Create
-            <LuSettings2 />
+            <BsFillPersonPlusFill />
           </Button>
         </NavLink>
       </FlexContainer>
+
       <FlexContainer
         justifyContent="space-between"
         style={{
@@ -119,7 +155,18 @@ const Contact = () => {
         }}
       >
         <h4>Favourite</h4>
-        <PiArrowRight />
+        <NavLink
+          to="/favourite"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            textDecoration: "none",
+          }}
+        >
+          View All
+          <PiArrowRight />
+        </NavLink>
       </FlexContainer>
       <FlexContainer
         justifyContent="start"
@@ -127,11 +174,28 @@ const Contact = () => {
           overflowX: "scroll",
         }}
       >
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
+        {favContacts?.length > 0 ? (
+          favContacts?.map((contact: TContact) => {
+            return (
+              <FavouriteContactIcon
+                contact={contact}
+                key={contact.id}
+                toggleDetailModal={() => {
+                  setIsDetailModalOpen(true), setSelectedId(contact.id);
+                }}
+              />
+            );
+          })
+        ) : (
+          <p
+            style={{
+              textAlign: "center",
+            }}
+          >
+            No Favourite Contact yet,{" "}
+            <span style={{ color: "#03ac0eff" }}>start adding one!</span>
+          </p>
+        )}
       </FlexContainer>
       <div>
         {loading && <div>Loading...</div>}
@@ -165,9 +229,13 @@ const Contact = () => {
             </ContactGridContainer>
           </>
         ) : (
-          <h2 style={{ 
-            textAlign: "center",
-           }}>No Contact Available</h2>
+          <h2
+            style={{
+              textAlign: "center",
+            }}
+          >
+            No Contact Available
+          </h2>
         )}
         <PaginationContainer>
           {page > 1 && (
@@ -175,14 +243,13 @@ const Contact = () => {
               Previous
             </PaginationButton>
           )}
-          {/* {data && data.contact.length > 10 && ( */}
-            <>
-              <PaginationButton onClick={() => handlePageChange("next")}>
-                Next
-              </PaginationButton>
-              <PaginationMoreButton>Load More</PaginationMoreButton>
-            </>
-          {/* )} */}
+          {data?.contact?.length >= 10 && (
+            <PaginationButton onClick={() => handlePageChange("next")}>
+              Next
+            </PaginationButton>
+          )}
+
+          <PaginationMoreButton>Load More</PaginationMoreButton>
         </PaginationContainer>
       </div>
       <DeleteModal
