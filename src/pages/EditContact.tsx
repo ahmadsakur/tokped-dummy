@@ -1,55 +1,29 @@
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
 import { PiPen } from "react-icons/pi";
 import { UPDATE_WITH_ID_MUTATION } from "@/lib/graphql/mutation";
 import toast from "react-hot-toast";
 import EditPNModal from "@/components/modal/EditPNModal";
-import { BsArrowLeft, BsCursorText, BsPhone } from "react-icons/bs";
+import { BsPhone, BsPerson } from "react-icons/bs";
 import Button from "@/components/Button";
+import BackNav from "@/components/BackNav";
+import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import { colors } from "@/utils/colors";
 
-const StyledButton = styled.div`
+const Container = styled.div`
   display: flex;
-  width: fit-content;
-  justify-content: flex-start;
-  padding: 0.5rem 0;
-  cursor: pointer;
-  transition: border-color 0.2s ease-in-out;
-
-  &:hover {
-    border-color: ${colors.green400};
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  align-items: start;
+  justify-content: start;
+  @media (min-width: 768px) {
+    flex-direction: row;
   }
 `;
-
-const Text = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: bold;
-
-  &:hover {
-    color: ${colors.green400};
-  }
-`;
-
-const IconContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  svg {
-    color: ${colors.dark};
-    &.group-hover {
-      color: ${colors.green400};
-    }
-  }
-`;
-
 interface FormData {
   first_name: string;
   last_name: string;
@@ -126,75 +100,104 @@ const EditContact = () => {
   };
 
   return (
-    <div>
-      <NavLink to="/contact">
-        <StyledButton>
-          <IconContainer>
-            <BsArrowLeft className="group-hover" />
-          </IconContainer>
-          <Text>Back</Text>
-        </StyledButton>
-      </NavLink>
-      <h1>Edit Contact</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data?.contact_by_pk ? (
-        <form onSubmit={updateContactHandler}>
-          <CustomInput
-            type="text"
-            id="first_name"
-            label="First Name"
-            value={formData.first_name}
-            onValueChange={handleFirstNameChange}
-            icon={<BsCursorText />}
-          />
-          <CustomInput
-            type="text"
-            id="last_name"
-            label="Last Name"
-            value={formData.last_name}
-            onValueChange={handleLastNameChange}
-            icon={<BsCursorText />}
-          />
-          {formData.phones.map((phone, index) => (
-            <FlexContainer key={index}>
+    <div
+      style={{
+        width: "100%",
+        position: "relative",
+      }}
+    >
+      <h2>Edit Contact</h2>
+      <BackNav path="/contact" />
+      <Container>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            aspectRatio: "2/1",
+            backgroundColor: "#ebffefff",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            borderRadius: "0.5rem",
+          }}
+        ></div>
+        <div
+          style={{
+            width: "100%",
+          }}
+        >
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error.message}</p>}
+          {data?.contact_by_pk ? (
+            <form
+              onSubmit={updateContactHandler}
+              style={{
+                width: "100%",
+              }}
+            >
               <CustomInput
-                id={`phone-${index}`}
-                label={`Phone ${index + 1}`}
-                placeholder={`Phone ${index + 1}`}
                 type="text"
-                value={phone}
-                readonly
-                icon={<BsPhone />}
+                id="first_name"
+                label="First Name"
+                value={formData.first_name}
+                onValueChange={handleFirstNameChange}
+                icon={<BsPerson />}
               />
-              {formData.phones.length > 1 && (
-                <button onClick={(e) => handleUpdatePN(e, phone)}>
-                  <PiPen />
-                </button>
-              )}
-            </FlexContainer>
-          ))}
-          <Button
-            type="submit"
-            buttonType="PRIMARY"
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            Update Contact
-          </Button>
-        </form>
-      ) : (
-        "no data"
-      )}
-      {isEditModalOpen && (
-        <EditPNModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          selectedPN={selectedPN}
-          id={id}
-        />
-      )}
+              <CustomInput
+                type="text"
+                id="last_name"
+                label="Last Name"
+                value={formData.last_name}
+                onValueChange={handleLastNameChange}
+                icon={<BsPerson />}
+              />
+              {formData.phones.map((phone, index) => (
+                <FlexContainer key={index} alignItems="center">
+                  <CustomInput
+                    id={`phone-${index}`}
+                    label={`Phone ${index + 1}`}
+                    placeholder={`Phone ${index + 1}`}
+                    type="text"
+                    value={phone}
+                    readonly
+                    icon={<BsPhone />}
+                  />
+                  {formData.phones.length > 1 && (
+                    <div
+                      style={{
+                        height: "100%",
+                      }}
+                    >
+                      <Button onClick={(e) => handleUpdatePN(e, phone)}>
+                        <PiPen />
+                      </Button>
+                    </div>
+                  )}
+                </FlexContainer>
+              ))}
+              <Button
+                type="submit"
+                buttonType="PRIMARY"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Update Contact
+              </Button>
+            </form>
+          ) : (
+            "no data"
+          )}
+          {isEditModalOpen && (
+            <EditPNModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              selectedPN={selectedPN}
+              id={id}
+            />
+          )}
+        </div>
+      </Container>
     </div>
   );
 };

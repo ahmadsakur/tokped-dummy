@@ -17,7 +17,9 @@ export default function Favourite() {
   }, [debouncedValue])
 
   return (
-    <div>
+    <div style={{
+      width: "100%",
+    }}>
       <p>Value real-time: {value}</p>
       <p>Debounced value: {debouncedValue}</p>
 

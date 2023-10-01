@@ -11,6 +11,7 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
 import DetailModal from "@/components/modal/DetailModal";
+import { BsFillPersonPlusFill } from "react-icons/bs";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -105,7 +106,7 @@ const Contact = () => {
         <NavLink to="/contact/create">
           <Button buttonType="PRIMARY">
             Create
-            {/* <LuSettings2 /> */}
+            <BsFillPersonPlusFill />
           </Button>
         </NavLink>
       </FlexContainer>

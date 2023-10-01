@@ -5,8 +5,8 @@ import { colors } from "@/utils/colors";
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  onClick?: () => void;
-  buttonType: "PRIMARY" | "SECONDARY";
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  buttonType?: "PRIMARY" | "SECONDARY";
   style?: React.CSSProperties & CSSObject;
 }
 
@@ -14,11 +14,11 @@ const StyledButton = styled.button<IButtonProps>`
   border: none;
   box-sizing: border-box;
   border-radius: 4px;
-  padding: 12px 16px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
   cursor: pointer;
   font-size: .8rem;
   font-weight: 500;

@@ -10,6 +10,7 @@ const Label = styled.label`
 `;
 
 const InputContainer = styled.div`
+  width: 100%;
   position: relative;
   margin-bottom: 6px;
 `;
@@ -18,7 +19,7 @@ const IconContainer = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0.4rem;
+  left: 0.6rem;
   display: flex;
   align-items: center;
   padding-right: 0.4rem;
@@ -30,12 +31,13 @@ const IconContainer = styled.div`
 `;
 
 const Input = styled.input`
-  padding: 0.625rem 2rem;
+  width: fill-available;
+  padding: 0.8rem 2rem;
   background-color: white;
   border: 1px solid green;
   color: ${colors.dark};
   font-size: 14px;
-  border-radius: 0.375rem;
+  border-radius: 0.3rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   ${({ readOnly }) =>
@@ -75,7 +77,9 @@ function CustomInput({
   icon,
 }: ICustomeInputProps) {
   return (
-    <div>
+    <div style={{ 
+      width: "100%",
+     }}>
       <Label htmlFor={id}>{label}</Label>
       <InputContainer>
         <IconContainer>{icon}</IconContainer>

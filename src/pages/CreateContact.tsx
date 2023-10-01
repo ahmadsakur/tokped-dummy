@@ -1,9 +1,25 @@
+import BackNav from "@/components/BackNav";
+import Button from "@/components/Button";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
 import { CREATE_CONTACT_MUTATION } from "@/lib/graphql/mutation";
 import { useMutation } from "@apollo/client";
+import styled from "@emotion/styled";
 import React from "react";
 import toast from "react-hot-toast";
+import { BsPerson, BsPhone } from "react-icons/bs";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  align-items: start;
+  justify-content: start;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+`;
 
 type TFormData = {
   first_name: string;
@@ -37,6 +53,13 @@ const CreateContact = () => {
     setFormData({ ...formData, phones: [...formData.phones, ""] });
   };
 
+  const handleResetForm = () => {
+    setFormData({
+      first_name: "",
+      last_name: "",
+      phones: [""],
+    });
+  };
   const createContactHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -65,46 +88,83 @@ const CreateContact = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={createContactHandler}>
-        <CustomInput
-          id="first_name"
-          label="First Name"
-          placeholder="First Name"
-          type="text"
-          value={formData.first_name}
-          defaultValue={""}
-          onValueChange={handleFormChange}
-        />
-        <CustomInput
-          id="last_name"
-          label="Last Name"
-          placeholder="Last Name"
-          value={formData.last_name}
-          type="text"
-          onValueChange={handleFormChange}
-        />
-        {formData.phones.map((phone, index) => (
-          <FlexContainer key={index}>
-            <CustomInput
-              id={`phone-${index}`}
-              label={`Phone ${index + 1}`}
-              placeholder={`Phone ${index + 1}`}
-              type="text"
+    <div
+      style={{
+        width: "100%",
+        position: "relative",
+      }}
+    >
+      <h2>Create Contact</h2>
+      <BackNav path="/contact" />
+      <Container>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            aspectRatio: "2/1",
+            backgroundColor: "#ebffefff",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            borderRadius: "0.5rem",
+          }}
+        ></div>
+        <form
+          onSubmit={createContactHandler}
+          style={{
+            width: "100%",
+          }}
+        >
+          <CustomInput
+            id="first_name"
+            label="First Name"
+            placeholder="First Name"
+            type="text"
+            value={formData.first_name}
+            defaultValue={""}
+            onValueChange={handleFormChange}
+            icon={<BsPerson />}
+          />
+          <CustomInput
+            id="last_name"
+            label="Last Name"
+            placeholder="Last Name"
+            value={formData.last_name}
+            type="text"
+            onValueChange={handleFormChange}
+            icon={<BsPerson />}
+          />
+          {formData.phones.map((phone, index) => (
+            <FlexContainer key={index}>
+              <CustomInput
+                id={`phone-${index}`}
+                label={`Phone ${index + 1}`}
+                placeholder={`Phone ${index + 1}`}
+                type="text"
               value={phone}
-              defaultValue={phone}
-              onValueChange={(e) => handlePhoneChange(e, index)}
-            />
-            {index === formData.phones.length - 1 && (
-              <button type="button" onClick={handleAddPhone}>
-                Add Phone
-              </button>
-            )}
-          </FlexContainer>
-        ))}
-        <button type="submit">Submit</button>
-      </form>
-      {JSON.stringify(formData)}
+                onValueChange={(e) => handlePhoneChange(e, index)}
+                icon={<BsPhone />}
+              />
+            </FlexContainer>
+          ))}
+          <div
+            style={{
+              display: "flex",
+              gap: ".4rem",
+              marginTop: ".6rem",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button onClick={handleAddPhone}>Add Phone</Button>
+            <Button buttonType="SECONDARY" onClick={handleResetForm}>
+              Reset
+            </Button>
+            <Button buttonType="PRIMARY" type="submit">
+              Submit
+            </Button>
+          </div>
+        </form>
+      </Container>
     </div>
   );
 };
