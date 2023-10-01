@@ -7,12 +7,13 @@ import CustomInput from "@/components/Input";
 import { useMutation } from "@apollo/client";
 import { UPDATE_PN_MUTATION } from "@/lib/graphql/mutation";
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
+import { BsPhone } from "react-icons/bs";
 
 interface IUpdatePNModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedPN: string;
-  id: number;
+  id: string | number | undefined;
 }
 
 const ModalOverlay = styled.div`
@@ -165,13 +166,15 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
             label="Phone Number"
             value={selectedPN}
             readonly
-          />
+            icon={<BsPhone />}
+            />
           <CustomInput
             type="text"
             id="new-phone"
             label="New Phone Number"
             value={updatedPN}
             onValueChange={(e) => setUpdatedPN(e.target.value)}
+            icon={<BsPhone />}
           />
 
           <ModalButtonContainer>

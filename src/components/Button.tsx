@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import styled from "@emotion/styled";
 import { CSSObject, css } from "@emotion/react";
 import { colors } from "@/utils/colors";
 
-interface IButtonProps {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   onClick?: () => void;
   buttonType: "PRIMARY" | "SECONDARY";
