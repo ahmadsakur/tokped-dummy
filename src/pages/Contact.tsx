@@ -6,12 +6,16 @@ import { useQuery } from "@apollo/client";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import DeleteModal from "@/components/modal/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
 import DetailModal from "@/components/modal/DetailModal";
-import { BsFillPersonPlusFill } from "react-icons/bs";
+import { BsFillPersonPlusFill, BsSearch } from "react-icons/bs";
+import { useDebounce } from "@/hooks/useDebounce";
+import CustomInput from "@/components/Input";
+import FavouriteContactIcon from "@/components/FavouriteContactIcon";
+import { useContactContext } from "@/context/contactContext";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -54,7 +58,7 @@ const PaginationMoreButton = styled.button`
   border-radius: 0.5rem;
   margin-right: 1rem;
   cursor: pointer;
-  color: ${colors.mint};
+  color: ${colors.green500};
 
   @media (min-width: 768px) {
     display: none;
@@ -64,15 +68,34 @@ const Contact = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(-1);
   const [isDeleteModalOpen, setisDeleteModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [keyword, setKeyword] = useState<string>("");
+  const debouncedKeywordValue = useDebounce<string>(keyword, 500);
+  const { favContacts } = useContactContext();
+
   const [selectedId, setSelectedId] = useState(-1);
   const [page, setPage] = useState(1);
 
+  const handleKeywordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
   const { loading, error, data, refetch } = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
       offset: page * 10 - 10,
     },
   });
+
+  useEffect(() => {
+    refetch({
+      where: {
+        _or: [
+          { first_name: { _like: `%${debouncedKeywordValue}%` } },
+          { last_name: { _like: `%${debouncedKeywordValue}%` } },
+          { phones: { number: { _like: `%${debouncedKeywordValue}%` } } },
+        ],
+      },
+    });
+  }, [debouncedKeywordValue, refetch]);
 
   useEffect(() => {
     refetch({
@@ -110,6 +133,21 @@ const Contact = () => {
           </Button>
         </NavLink>
       </FlexContainer>
+      <div
+        style={{
+          width: "100%",
+          padding: "0.8rem 0",
+        }}
+      >
+        <CustomInput
+          icon={<BsSearch />}
+          id="search-input"
+          type="text"
+          value={keyword}
+          onValueChange={handleKeywordChange}
+          placeholder="search name, or phone number"
+        />
+      </div>
       <FlexContainer
         justifyContent="space-between"
         style={{
@@ -126,11 +164,28 @@ const Contact = () => {
           overflowX: "scroll",
         }}
       >
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
-        <img src="https://ui-avatars.com/api/?name=john+doe" alt="" />
+        {favContacts?.length > 0 ? (
+          favContacts?.map((contact: TContact) => {
+            return (
+              <FavouriteContactIcon
+                contact={contact}
+                key={contact.id}
+                toggleDetailModal={() => {
+                  setIsDetailModalOpen(true), setSelectedId(contact.id);
+                }}
+              />
+            );
+          })
+        ) : (
+          <p
+            style={{
+              textAlign: "center",
+            }}
+          >
+            No Favourite Contact yet,{" "}
+            <span style={{ color: "#03ac0eff" }}>start adding one!</span>
+          </p>
+        )}
       </FlexContainer>
       <div>
         {loading && <div>Loading...</div>}
@@ -164,9 +219,13 @@ const Contact = () => {
             </ContactGridContainer>
           </>
         ) : (
-          <h2 style={{ 
-            textAlign: "center",
-           }}>No Contact Available</h2>
+          <h2
+            style={{
+              textAlign: "center",
+            }}
+          >
+            No Contact Available
+          </h2>
         )}
         <PaginationContainer>
           {page > 1 && (
@@ -174,14 +233,13 @@ const Contact = () => {
               Previous
             </PaginationButton>
           )}
-          {/* {data && data.contact.length > 10 && ( */}
-            <>
-              <PaginationButton onClick={() => handlePageChange("next")}>
-                Next
-              </PaginationButton>
-              <PaginationMoreButton>Load More</PaginationMoreButton>
-            </>
-          {/* )} */}
+          {data?.contact?.length >= 10 && (
+            <PaginationButton onClick={() => handlePageChange("next")}>
+              Next
+            </PaginationButton>
+          )}
+
+          <PaginationMoreButton>Load More</PaginationMoreButton>
         </PaginationContainer>
       </div>
       <DeleteModal

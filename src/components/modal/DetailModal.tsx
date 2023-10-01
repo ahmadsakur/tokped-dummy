@@ -5,6 +5,9 @@ import { colors } from "@/utils/colors";
 import Button from "@/components/Button";
 import { useQuery } from "@apollo/client";
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
+import { useContactContext } from "@/context/contactContext";
+import { BsStar, BsStarFill } from "react-icons/bs";
+import toast from "react-hot-toast";
 
 interface IDetailModal {
   isOpen: boolean;
@@ -75,7 +78,7 @@ const ProfileImage = styled.img`
   border-radius: 100%;
   position: absolute;
 
-  background-color: ${colors.mint};
+  background-color: ${colors.green500};
 `;
 
 const DetailModal: React.FC<IDetailModal> = ({
@@ -88,6 +91,23 @@ const DetailModal: React.FC<IDetailModal> = ({
       id: contactId,
     },
   });
+
+  const { favContacts, setFavContacts } = useContactContext();
+  const isFav = favContacts.some((favContact) => favContact.id === contactId);
+
+  const handleFav = () => {
+    if (isFav) {
+      // remove from fav
+      setFavContacts((prev) =>
+        prev.filter((favContact) => favContact.id !== contactId)
+      );
+      toast.success("Contact removed from favourite");
+    } else {
+      setFavContacts((prev) => [...prev, data.contact_by_pk]);
+      toast.success("Contact added to favourite");
+    }
+    onClose();
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -138,13 +158,21 @@ const DetailModal: React.FC<IDetailModal> = ({
                 <p>{phone.number}</p>
               ))}
               <ModalButtonContainer>
-                <Button onClick={onClose} buttonType="PRIMARY" >
-                  {/* <GrUndo /> */}
-                  Add to Favourite
-                </Button>
                 <Button onClick={onClose} buttonType="SECONDARY">
-                  {/* <MdOutlineCancel /> */}
                   Close
+                </Button>
+                <Button onClick={handleFav} buttonType="PRIMARY">
+                  {isFav ? (
+                    <>
+                      <BsStar />
+                      Remove from Favourite
+                    </>
+                  ) : (
+                    <>
+                      <BsStarFill />
+                      Add to Favourite
+                    </>
+                  )}
                 </Button>
               </ModalButtonContainer>
             </div>

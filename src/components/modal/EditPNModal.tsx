@@ -144,7 +144,7 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
       toast.success("Contact updated successfully");
       onClose();
     } catch (error) {
-      toast.error("An error occurred while updating the contact");
+      toast.error("Phone number already saved elsewhere");
       console.error("An error occurred while updating the contact:", error);
     }
   };

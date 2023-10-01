@@ -79,24 +79,31 @@ const EditContact = () => {
   const updateContactHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const { data } = await updateContactMutation({
-        variables: {
-          id: id,
-          _set: {
-            first_name: formData.first_name,
-            last_name: formData.last_name,
+    const updateContact = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      try {
+        const { data } = await updateContactMutation({
+          variables: {
+            id: id,
+            _set: {
+              first_name: formData.first_name,
+              last_name: formData.last_name,
+            },
           },
-        },
-      });
+        });
 
-      refetch();
-      console.log("Mutation response:", data);
-      toast.success("Contact updated successfully!");
-    } catch (error) {
-      console.error("Mutation error:", error);
-      toast.error("something went wrong!");
-    }
+        refetch();
+        console.log("Mutation response:", data);
+      } catch (error) {
+        console.error("Mutation error:", error);
+      }
+    };
+
+    toast.promise(updateContact(), {
+      loading: "Updating contact...",
+      success: "Contact updated successfully!",
+      error: "Something went wrong!",
+    });
   };
 
   return (
@@ -162,17 +169,15 @@ const EditContact = () => {
                     readonly
                     icon={<BsPhone />}
                   />
-                  {formData.phones.length > 1 && (
-                    <div
-                      style={{
-                        height: "100%",
-                      }}
-                    >
-                      <Button onClick={(e) => handleUpdatePN(e, phone)}>
-                        <PiPen />
-                      </Button>
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <Button onClick={(e) => handleUpdatePN(e, phone)}>
+                      <PiPen />
+                    </Button>
+                  </div>
                 </FlexContainer>
               ))}
               <Button

@@ -54,8 +54,8 @@ const Input = styled.input`
   }
 `;
 
-interface ICustomeInputProps {
-  label: string;
+interface ICustomeInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
   placeholder?: string;
   type: string;
   id: string;

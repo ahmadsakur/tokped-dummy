@@ -63,28 +63,37 @@ const CreateContact = () => {
   const createContactHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const { data } = await createContactMutation({
-        variables: {
-          first_name: formData.first_name,
-          last_name: formData.last_name,
-          phones: formData.phones.map((number) => ({
-            number: number,
-          })),
-        },
-      });
+    const createContact = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const { data } = await createContactMutation({
+          variables: {
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            phones: formData.phones.map((number) => ({
+              number: number,
+            })),
+          },
+        });
 
-      setFormData({
-        first_name: "",
-        last_name: "",
-        phones: [""],
-      });
-      console.log("Mutation response:", data);
-      toast.success("Contact created successfully!");
-    } catch (error) {
-      console.error("Mutation error:", error);
-      toast.error("Data already been used!");
-    }
+        setFormData({
+          first_name: "",
+          last_name: "",
+          phones: [""],
+        });
+        console.log("Mutation response:", data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        console.error("Mutation error:", error.message);
+        throw new Error(error);
+      }
+    };
+
+    toast.promise(createContact(), {
+      loading: "Creating contact...",
+      success: "Contact updated successfully!",
+      error: (error) => `${error.message}`,
+    });
   };
 
   return (
@@ -141,7 +150,7 @@ const CreateContact = () => {
                 label={`Phone ${index + 1}`}
                 placeholder={`Phone ${index + 1}`}
                 type="text"
-              value={phone}
+                value={phone}
                 onValueChange={(e) => handlePhoneChange(e, index)}
                 icon={<BsPhone />}
               />

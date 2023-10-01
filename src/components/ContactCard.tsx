@@ -39,7 +39,7 @@ export const DropdownItem = styled.div`
   font-size: 0.8rem;
   color: ${colors.green100};
   &:hover {
-    background-color: ${colors.green500}
+    background-color: ${colors.green500};
   }
 `;
 const ContactCardWrapper = styled.div`
@@ -73,8 +73,7 @@ const ContactCard = ({
   isExpanded,
   toggleDropdown,
   toggleDeleteModal,
-  toggleDetailModal
-  ,
+  toggleDetailModal,
 }: IContactCard) => {
   const { first_name, last_name, phones, id } = contact;
   return (
@@ -116,9 +115,7 @@ const ContactCard = ({
                   <FiEdit /> Edit
                 </DropdownItem>
               </NavLink>
-              <DropdownItem
-                onClick={() => toggleDeleteModal()}
-              >
+              <DropdownItem onClick={() => toggleDeleteModal()}>
                 <FiDelete />
                 Delete
               </DropdownItem>
