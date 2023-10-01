@@ -2,7 +2,6 @@ import { colors } from "@/utils/colors";
 import { TContact } from "@/utils/queryType";
 import styled from "@emotion/styled";
 import { FiDelete, FiEdit } from "react-icons/fi";
-// import { useEffect, useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
 import { NavLink } from "react-router-dom";
 
@@ -10,7 +9,8 @@ interface IContactCard {
   contact: TContact;
   toggleDropdown: () => void;
   isExpanded: boolean;
-  toggleModal: () => void;
+  toggleDeleteModal: () => void;
+  toggleDetailModal: () => void;
 }
 
 export const DropdownMenu = styled.div`
@@ -70,7 +70,9 @@ const ContactCard = ({
   contact,
   isExpanded,
   toggleDropdown,
-  toggleModal,
+  toggleDeleteModal,
+  toggleDetailModal
+  ,
 }: IContactCard) => {
   const { first_name, last_name, phones, id } = contact;
   return (
@@ -82,7 +84,9 @@ const ContactCard = ({
             flexDirection: "row",
             gap: "1rem",
             alignItems: "center",
+            cursor: "pointer",
           }}
+          onClick={() => toggleDetailModal()}
         >
           <AvatarImage
             src={`https://ui-avatars.com/api/?name=${first_name}+${last_name}&background=random`}
@@ -112,7 +116,7 @@ const ContactCard = ({
               </NavLink>
               <DropdownItem
                 color={colors.bittersweet}
-                onClick={() => toggleModal()}
+                onClick={() => toggleDeleteModal()}
               >
                 <FiDelete />
                 Delete

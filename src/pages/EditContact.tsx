@@ -1,6 +1,6 @@
 import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
 import { useMutation, useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CustomInput from "@/components/Input";
 import { FlexContainer } from "@/components/utility/layout";
@@ -26,7 +26,10 @@ const EditContact = () => {
   const [selectedPN, setSelectedPN] = useState<string>("");
   const { loading, error, data, refetch } = useQuery(GET_CONTACT_DETAIL, {
     variables: { id },
-    onCompleted: (data) => {
+  });
+
+  useEffect(() => {
+    if (data) {
       setFormData({
         first_name: data.contact_by_pk.first_name,
         last_name: data.contact_by_pk.last_name,
@@ -34,8 +37,8 @@ const EditContact = () => {
           (phone: { number: string }) => phone.number
         ),
       });
-    },
-  });
+    }
+  }, [data]);
 
   const [updateContactMutation] = useMutation(UPDATE_WITH_ID_MUTATION);
 

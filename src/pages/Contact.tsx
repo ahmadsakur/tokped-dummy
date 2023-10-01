@@ -7,11 +7,11 @@ import { LuSettings2 } from "react-icons/lu";
 import { TContact } from "@/utils/queryType";
 import ContactCard from "@/components/ContactCard";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "@/components/DeleteModal";
 import { PiArrowRight } from "react-icons/pi";
-import { useContactContext } from "@/context/contactContext";
 import { NavLink } from "react-router-dom";
+import DetailModal from "@/components/DetailModal";
 
 const ContactGridContainer = styled.div`
   display: grid;
@@ -23,23 +23,75 @@ const ContactGridContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+  }
+`;
+
+const PaginationButton = styled.button`
+  display: none;
+  @media (min-width: 768px) {
+    border: none;
+    background-color: ${colors.white};
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    color: ${colors.mint};
+    display: block;
+  }
+`;
+
+const PaginationMoreButton = styled.button`
+  border: none;
+  background-color: ${colors.white};
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  color: ${colors.mint};
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
 const Contact = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(-1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setisDeleteModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(-1);
+  const [page, setPage] = useState(1);
 
-  const { loading, error } = useQuery(GET_CONTACT_LIST, {
+  const { loading, error, data, refetch } = useQuery(GET_CONTACT_LIST, {
     variables: {
       limit: 10,
-    },
-    onCompleted: (data) => {
-      setContacts(data.contact);
+      offset: page * 10 - 10,
     },
   });
 
-  const { contacts, setContacts } = useContactContext();
+  useEffect(() => {
+    refetch({
+      limit: 10,
+      offset: page * 10 - 10,
+    });
+  }, [page, refetch]);
+
   const toggleDropdown = (index: number) => {
     setOpenDropdownIndex((prevIndex) => (prevIndex === index ? -1 : index));
+  };
+
+  const handlePageChange = (type: "prev" | "next") => {
+    if (type === "prev") {
+      setPage((prevPage) => prevPage - 1);
+    } else {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
   return (
@@ -83,9 +135,8 @@ const Contact = () => {
       </FlexContainer>
       <div>
         {loading && <div>Loading...</div>}
-        {error ? (
-          <div>Error...</div>
-        ) : (
+        {error && <div>Error...</div>}
+        {data && data.contact.length > 0 ? (
           <>
             <h4
               style={{
@@ -95,14 +146,17 @@ const Contact = () => {
               All Contacts
             </h4>
             <ContactGridContainer>
-              {contacts.map((contact: TContact) => {
+              {data.contact.map((contact: TContact) => {
                 return (
                   <ContactCard
                     contact={contact}
                     key={contact.id}
                     toggleDropdown={() => toggleDropdown(contact.id)}
-                    toggleModal={() => {
-                      setIsModalOpen(true), setSelectedId(contact.id);
+                    toggleDetailModal={() => {
+                      setIsDetailModalOpen(true), setSelectedId(contact.id);
+                    }}
+                    toggleDeleteModal={() => {
+                      setisDeleteModalOpen(true), setSelectedId(contact.id);
                     }}
                     isExpanded={openDropdownIndex === contact.id}
                   />
@@ -110,12 +164,36 @@ const Contact = () => {
               })}
             </ContactGridContainer>
           </>
+        ) : (
+          <h2 style={{ 
+            textAlign: "center",
+           }}>No Contact Available</h2>
         )}
+        <PaginationContainer>
+          {page > 1 && (
+            <PaginationButton onClick={() => handlePageChange("prev")}>
+              Previous
+            </PaginationButton>
+          )}
+          {/* {data && data.contact.length > 10 && ( */}
+            <>
+              <PaginationButton onClick={() => handlePageChange("next")}>
+                Next
+              </PaginationButton>
+              <PaginationMoreButton>Load More</PaginationMoreButton>
+            </>
+          {/* )} */}
+        </PaginationContainer>
       </div>
       <DeleteModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setisDeleteModalOpen(false)}
         selectedContact={selectedId}
+      />
+      <DetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        contactId={selectedId}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import CustomInput from "./Input";
 import { useMutation } from "@apollo/client";
 import { UPDATE_PN_MUTATION } from "@/lib/graphql/mutation";
+import { GET_CONTACT_DETAIL } from "@/lib/graphql/query";
 
 interface IUpdatePNModalProps {
   isOpen: boolean;
@@ -15,7 +16,6 @@ interface IUpdatePNModalProps {
   selectedPN: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   id: any;
-  
 }
 
 const ModalOverlay = styled.div`
@@ -95,7 +95,6 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
   };
 
   const handleUpdatePN = async () => {
-    
     try {
       await updatePN({
         variables: {
@@ -107,19 +106,42 @@ const EditPNModal: React.FC<IUpdatePNModalProps> = ({
         },
 
         update: (cache) => {
-          cache.modify({
-            fields: {
-              phone(existingPhones = [], { readField }) {
-                return existingPhones.filter(
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (phoneRef: any) =>
-                    selectedPN !== readField("number", phoneRef)
-                );
-              },
-            },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const existingContactDetail:any = cache.readQuery({
+            query: GET_CONTACT_DETAIL,
+            variables: { id: id },
           });
-        }
 
+          if (existingContactDetail) {
+            const updatedContactDetail = {
+              ...existingContactDetail,
+              contact_by_pk: {
+                ...existingContactDetail.contact_by_pk,
+                phones: [
+                  ...existingContactDetail.contact_by_pk.phones.map(
+                    (phone: { id: number }) => {
+                      if (phone.id === id) {
+                        return {
+                          ...phone,
+                          number: updatedPN,
+                        };
+                      }
+                      return phone;
+                    }
+                  ),
+                ],
+              },
+            };
+
+            console.log("updatedContactDetail", updatedContactDetail)
+
+            cache.writeQuery({
+              query: GET_CONTACT_DETAIL,
+              variables: { id: id },
+              data: updatedContactDetail,
+            });
+          }
+        },
       });
       toast.success("Contact updated successfully");
       onClose();

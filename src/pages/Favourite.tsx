@@ -1,13 +1,27 @@
-import toast from "react-hot-toast";
+import { ChangeEvent, useEffect, useState } from 'react'
 
-const Favourite = () => {
-  const handletoast = () => {
-    toast.success("🦄 Wow so easy!", {
-      position: "top-center",
-      duration: 2000,
-    });
-  };
-  return <button onClick={handletoast}>Click</button>;
-};
+import { useDebounce } from '@/hooks/useDebounce' 
 
-export default Favourite;
+export default function Favourite() {
+  const [value, setValue] = useState<string>('')
+  const debouncedValue = useDebounce<string>(value, 500)
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value)
+  }
+
+  // Fetch API (optional)
+  useEffect(() => {
+    // Do fetch here...
+    // Triggers when "debouncedValue" changes
+  }, [debouncedValue])
+
+  return (
+    <div>
+      <p>Value real-time: {value}</p>
+      <p>Debounced value: {debouncedValue}</p>
+
+      <input type="text" value={value} onChange={handleChange} />
+    </div>
+  )
+}
