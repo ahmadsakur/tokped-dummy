@@ -53,8 +53,8 @@ const Contact = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [keyword, setKeyword] = useState<string>("");
   const debouncedKeywordValue = useDebounce<string>(keyword, 500);
-  const { favContacts } = useContactContext();
-
+  const { favContacts, removeFromFavorite } = useContactContext();
+  const [filteredContact, setFilteredContact] = useState<TContact[]>([]);
   const [selectedId, setSelectedId] = useState(-1);
   const [page, setPage] = useState(1);
 
@@ -100,15 +100,28 @@ const Contact = () => {
   };
 
   useEffect(() => {
-    if(data) {
+    if (data) {
+      // check if favContacts is in data fetched from server, if not, then its stale, remove it
+
+      favContacts.forEach((favContact: TContact) => {
+        const isFavContactInData = data.contact.some(
+          (contact: TContact) => contact.id === favContact.id
+        );
+        if (!isFavContactInData) {
+          // remove from favContacts
+          removeFromFavorite(favContact);
+        }
+      });
+
       // remove element from data if it is in favContacts
       const filteredData = data.contact.filter((contact: TContact) => {
-        return !favContacts.some((favContact: TContact) => favContact.id === contact.id)
-      })
-      console.log('filteredData',filteredData)
+        return !favContacts.some(
+          (favContact: TContact) => favContact.id === contact.id
+        );
+      });
+      setFilteredContact(filteredData);
     }
-    console.log('ok')
-  },[favContacts,data])
+  }, [favContacts, data]);
 
   return (
     <div
@@ -135,9 +148,12 @@ const Contact = () => {
           />
         </div>
         <NavLink to="/contact/create">
-          <Button buttonType="PRIMARY" style={{ 
-            padding: ".8rem 1rem",
-           }}>
+          <Button
+            buttonType="PRIMARY"
+            style={{
+              padding: ".8rem 1rem",
+            }}
+          >
             Create
             <BsFillPersonPlusFill />
           </Button>
@@ -197,7 +213,7 @@ const Contact = () => {
       <div>
         {loading && <div>Loading...</div>}
         {error && <div>Error...</div>}
-        {data && data.contact.length > 0 ? (
+        {filteredContact && filteredContact.length > 0 ? (
           <>
             <h4
               style={{
@@ -207,7 +223,7 @@ const Contact = () => {
               All Contacts
             </h4>
             <ContactGridContainer>
-              {data.contact.map((contact: TContact) => {
+              {filteredContact.map((contact: TContact) => {
                 return (
                   <ContactCard
                     contact={contact}
