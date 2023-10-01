@@ -1,6 +1,7 @@
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Button from "../Button";
+import { colors } from "src/utils/colors";
 
 describe("Button", () => {
   it("should call the onClick function when clicked", () => {
@@ -21,7 +22,7 @@ describe("Button", () => {
     );
     const button = container.querySelector("button");
 
-    expect(button).toHaveStyle("background: green");
+    expect(button).toHaveStyle(`background: ${colors.green500}`);
     expect(button).toHaveStyle("color: white");
   });
 
@@ -32,7 +33,7 @@ describe("Button", () => {
     const button = container.querySelector("button");
 
     expect(button).toHaveStyle("background: white");
-    expect(button).toHaveStyle("color: green");
+    expect(button).toHaveStyle(`color: ${colors.green500}`);
     expect(button).toHaveStyle("border: 1px solid green");
   });
 

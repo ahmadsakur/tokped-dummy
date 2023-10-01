@@ -29,9 +29,6 @@ const StyledButton = styled.button<IButtonProps>`
     css`
       background: ${colors.green500};
       color: white;
-      &:hover {
-        background: ${colors.green600};
-      }
     `}
 
   ${({ buttonType }) =>

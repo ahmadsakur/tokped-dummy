@@ -105,7 +105,9 @@ const ContactCard = ({
           }}
           onClick={() => toggleDropdown()}
         >
-          <SlOptionsVertical />
+          <div id="dropdown-toggler">
+            <SlOptionsVertical />
+          </div>
           {isExpanded && (
             <DropdownMenu >
               <DropdownItem onClick={() => toggleDetailModal()}>
